@@ -1,0 +1,39 @@
+# CLion / CMake build files
+cmake-build-debug/
+cmake-build-release/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+*.cmake
+build/
+out/
+bin/
+lib/
+
+# IDE / Editor files
+.idea/
+.vscode/
+*.pro.user
+*.DotSettings
+
+# ImGui / runtime config
+imgui.ini
+
+# Compiled objects
+*.o
+*.obj
+*.so
+*.a
+*.dll
+*.lib
+*.exe
+*.pdb
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Temporary or test output
+*.log
+*.tmp
+*.bak
