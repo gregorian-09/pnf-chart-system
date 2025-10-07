@@ -93,6 +93,7 @@ namespace ChartSystem
         [[nodiscard]] int GetPeriod() const { return period; }
         [[nodiscard]] bool HasValue(int columnIndex) const;
         [[nodiscard]] std::string ToString() const;
+        [[nodiscard]] std::vector<double> GetValues() const { return this->values; }
 
     private:
         static double CalculateColumnAverage(const PnFColumn* column);
@@ -112,6 +113,9 @@ namespace ChartSystem
         [[nodiscard]] double GetMiddleBand(int columnIndex) const;
         [[nodiscard]] double GetUpperBand(int columnIndex) const;
         [[nodiscard]] double GetLowerBand(int columnIndex) const;
+        [[nodiscard]] std::vector<double> GetMiddleBandValues() const { return this->middleBand; }
+        [[nodiscard]] std::vector<double> GetUpperBandValues() const { return this->upperBand; }
+        [[nodiscard]] std::vector<double> GetLowerBandValues() const { return this->lowerBand; }
         [[nodiscard]] bool HasValue(int columnIndex) const;
         [[nodiscard]] bool IsAboveUpperBand(int columnIndex, double price) const;
         [[nodiscard]] bool IsBelowLowerBand(int columnIndex, double price) const;
