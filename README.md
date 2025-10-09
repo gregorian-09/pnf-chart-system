@@ -468,6 +468,7 @@ visualizer.SetShowBollingerBands(true);
 // Display chart (opens interactive window)
 visualizer.Show();
 ```
+![Point & Figure Chart](images/pnf.png) 
 
 ### Data Export
 
