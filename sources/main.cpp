@@ -25,8 +25,8 @@ int main()
         std::cout << "Trend Bias: " << (chart.HasBullishBias() ? "BULLISH" :
                                         chart.HasBearishBias() ? "BEARISH" : "NONE") << "\n";
 
-        if (chart.ExportToExcel("boom_500_pnf_chart.xlsx"))
-            std::cout << "Chart exported to excels/boom_500_pnf_chart.xlsx\n";
+        // if (chart.ExportToExcel("boom_500_pnf_chart.xlsx"))
+        //     std::cout << "Chart exported to excels/boom_500_pnf_chart.xlsx\n";
 
         ChartSystem::PnFIndicators indicators;
         indicators.Calculate(&chart);
