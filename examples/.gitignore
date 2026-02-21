@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+**/out/
+**/build/
+**/build-*/
+**/build-linux/
+**/target/
+**/__pycache__/
+**/.pytest_cache/
