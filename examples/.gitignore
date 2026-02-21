@@ -5,5 +5,7 @@
 **/build-*/
 **/build-linux/
 **/target/
+**/output/
 **/__pycache__/
 **/.pytest_cache/
+**/*_example_output.txt
