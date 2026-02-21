@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Maven configuration for Java bindings. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.pnf</groupId>
+    <artifactId>pnf-chart-system</artifactId>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
+
+    <name>PnF Chart Library</name>
+    <description>Point and Figure Chart Library - Java bindings with JNI</description>
+    <url>https://github.com/gregorian-09/pnf-chart-system</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>gregorian-09</id>
+            <name>Gregorian Rayne</name>
+            <email>gregorianrayne@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/gregorian-09/pnf-chart-system.git</connection>
+        <developerConnection>scm:git:ssh://github.com:gregorian-09/pnf-chart-system.git</developerConnection>
+        <url>https://github.com/gregorian-09/pnf-chart-system</url>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.release>21</maven.compiler.release>
+        <junit.version>5.14.1</junit.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+        <testSourceDirectory>.</testSourceDirectory>
+
+        <resources>
+            <resource>
+                <directory>native</directory>
+                <targetPath>native</targetPath>
+                <includes>
+                    <include>**/*.so</include>
+                    <include>**/*.dll</include>
+                    <include>**/*.dylib</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <release>${maven.compiler.release}</release>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <includes>
+                        <include>com/pnf/*.java</include>
+                    </includes>
+                    <testIncludes>
+                        <include>com/pnf/test/*.java</include>
+                    </testIncludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.4</version>
+                <configuration>
+                    <argLine>-Djava.library.path=${native.library.path}</argLine>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Bundle-NativeCode>
+                                native/linux-x86_64/libpnfjni.so;osname=Linux;processor=x86_64,
+                                native/darwin-x86_64/libpnfjni.dylib;osname=Mac OS X;processor=x86_64,
+                                native/darwin-aarch64/libpnfjni.dylib;osname=Mac OS X;processor=aarch64,
+                                native/windows-x86_64/pnfjni.dll;osname=Windows;processor=x86_64
+                            </Bundle-NativeCode>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.12.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourcepath>.</sourcepath>
+                    <subpackages>com.pnf</subpackages>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>cmake-configure</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>cmake</executable>
+                            <workingDirectory>${project.basedir}/../../build</workingDirectory>
+                            <arguments>
+                                <argument>..</argument>
+                                <argument>-DPNF_BUILD_TESTS=OFF</argument>
+                                <argument>-DPNF_BUILD_EXAMPLES=OFF</argument>
+                            </arguments>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <skip>${skipNativeBuild}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>cmake-build</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>cmake</executable>
+                            <workingDirectory>${project.basedir}/../../build</workingDirectory>
+                            <arguments>
+                                <argument>--build</argument>
+                                <argument>.</argument>
+                                <argument>--target</argument>
+                                <argument>pnf_shared</argument>
+                            </arguments>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <skip>${skipNativeBuild}</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[21,)</version>
+                                    <message>Java 21 or higher is required to build this project.</message>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>[3.6.0,)</version>
+                                    <message>Maven 3.6.0 or higher is required to build this project.</message>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- Windows Profile -->
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <native.library.path>${project.basedir}/native/windows-x86_64</native.library.path>
+            </properties>
+        </profile>
+
+        <!-- Linux Profile -->
+        <profile>
+            <id>linux</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>Linux</name>
+                </os>
+            </activation>
+            <properties>
+                <native.library.path>${project.basedir}/native/linux-x86_64</native.library.path>
+            </properties>
+        </profile>
+
+        <!-- macOS Intel Profile -->
+        <profile>
+            <id>mac-x86_64</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                    <arch>x86_64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.library.path>${project.basedir}/native/darwin-x86_64</native.library.path>
+            </properties>
+        </profile>
+
+        <!-- macOS Apple Silicon Profile -->
+        <profile>
+            <id>mac-aarch64</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <properties>
+                <native.library.path>${project.basedir}/native/darwin-aarch64</native.library.path>
+            </properties>
+        </profile>
+
+        <!-- Release Profile -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.8</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.13</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Skip Native Build Profile -->
+        <profile>
+            <id>skip-native</id>
+            <properties>
+                <skipNativeBuild>true</skipNativeBuild>
+            </properties>
+        </profile>
+    </profiles>
+</project>
