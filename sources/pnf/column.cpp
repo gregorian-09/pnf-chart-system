@@ -1,3 +1,6 @@
+/// \file column.cpp
+/// \brief Column implementation.
+
 //
 // Created by gregorian-rayne on 12/01/2026.
 //
@@ -37,13 +40,23 @@ namespace pnf
                                    [price](const auto& box) { return box && box->price() == price; });
     }
 
-    Box* Column::get_box(double price) const {
+    Box* Column::get_box(double price) {
         const auto it = std::ranges::find_if(boxes_,
                                              [price](const auto& box) { return box && box->price() == price; });
         return (it != boxes_.end()) ? it->get() : nullptr;
     }
 
-    Box* Column::get_box_at(const size_t index) const {
+    const Box* Column::get_box(double price) const {
+        const auto it = std::ranges::find_if(boxes_,
+                                             [price](const auto& box) { return box && box->price() == price; });
+        return (it != boxes_.end()) ? it->get() : nullptr;
+    }
+
+    Box* Column::get_box_at(const size_t index) {
+        return (index < boxes_.size()) ? boxes_[index].get() : nullptr;
+    }
+
+    const Box* Column::get_box_at(const size_t index) const {
         return (index < boxes_.size()) ? boxes_[index].get() : nullptr;
     }
 
@@ -52,7 +65,7 @@ namespace pnf
         return box ? box->marker() : std::string();
     }
 
-    bool Column::set_box_marker(const double price, const std::string& marker) const {
+    bool Column::set_box_marker(const double price, const std::string& marker) {
         if (Box* box = get_box(price)) {
             box->set_marker(marker);
             return true;

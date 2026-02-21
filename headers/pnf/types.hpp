@@ -1,3 +1,6 @@
+/// \file types.hpp
+/// \brief Public enums and data types.
+
 //
 // Created by gregorian-rayne on 12/01/2026.
 //

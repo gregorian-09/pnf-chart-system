@@ -1,3 +1,6 @@
+/// \file types.cpp
+/// \brief Types implementation.
+
 //
 // Created by gregorian-rayne on 13/01/2026.
 //

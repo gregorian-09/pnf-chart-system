@@ -1,3 +1,6 @@
+/// \file version.hpp
+/// \brief Version query helpers.
+
 //
 // Created by gregorian-rayne on 12/01/2026.
 //

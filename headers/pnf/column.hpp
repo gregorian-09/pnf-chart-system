@@ -1,3 +1,6 @@
+/// \file column.hpp
+/// \brief Column model and helpers.
+
 //
 // Created by gregorian-rayne on 12/01/2026.
 //
@@ -65,7 +68,8 @@ namespace pnf {
          * @param price Price of the box
          * @return Pointer to the Box if found, nullptr otherwise
          */
-        Box* get_box(double price) const;
+        Box* get_box(double price);
+        const Box* get_box(double price) const;
 
         /**
          * @brief Gets a pointer to the box at the specified index.
@@ -73,7 +77,8 @@ namespace pnf {
          * @param index Index of the box in the column
          * @return Pointer to the Box if index is valid, nullptr otherwise
          */
-        Box* get_box_at(size_t index) const;
+        Box* get_box_at(size_t index);
+        const Box* get_box_at(size_t index) const;
 
         /**
          * @brief Gets the marker of the box at the given price.
@@ -90,7 +95,7 @@ namespace pnf {
          * @param marker New marker string
          * @return true if the marker was set, false if the box does not exist
          */
-        bool set_box_marker(double price, const std::string& marker) const;
+        bool set_box_marker(double price, const std::string& marker);
 
         /**
          * @brief Returns the number of boxes in the column.
