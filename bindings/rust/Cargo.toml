@@ -1,0 +1,22 @@
+# Rust binding package metadata.
+[package]
+name = "pnf"
+version = "0.1.0"
+edition = "2021"
+authors = ["Gregorian Rayne <gregorianrayne@gmail.com>"]
+license = "MIT"
+description = "Point and Figure Chart Library - Rust bindings"
+repository = "https://github.com/gregorian-09/pnf-chart-system"
+keywords = ["point-figure", "chart", "technical-analysis", "trading"]
+categories = ["finance", "visualization"]
+links = "pnf"
+
+[lib]
+name = "pnf"
+crate-type = ["rlib"]
+
+[dependencies]
+
+[dev-dependencies]
+
+[build-dependencies]

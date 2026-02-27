@@ -1,18 +1,25 @@
 # CLion / CMake build files
 cmake-build-debug/
 cmake-build-release/
+cmake-build-*/
 CMakeFiles/
 CMakeCache.txt
 Makefile
 *.cmake
 build/
+build-*/
+build-linux/
 out/
 bin/
 lib/
 
 # IDE / Editor files
 .idea/
+*.iml
 .vscode/
+.classpath
+.project
+.settings/
 *.pro.user
 *.DotSettings
 
@@ -28,6 +35,8 @@ imgui.ini
 *.lib
 *.exe
 *.pdb
+*.dSYM/
+*.class
 
 # OS junk files
 .DS_Store
@@ -37,3 +46,49 @@ Thumbs.db
 *.log
 *.tmp
 *.bak
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+pip-wheel-metadata/
+
+# Rust
+bindings/rust/target/
+
+# Java / Maven
+bindings/java/target/
+bindings/java/native/
+*.jar
+*.war
+*.ear
+
+# C# / .NET
+bindings/csharp/bin/
+bindings/csharp/obj/
+examples/**/bin/
+examples/**/obj/
+
+# Misc tool caches
+.claude/
+
+# Internal-only docs
+internal/
+
+# CMake / build cache extras
+**/CMakeCache.txt
+**/CMakeFiles/
+**/Makefile
+**/*.cmake
+**/cmake_install.cmake
+**/CTestTestfile.cmake
+**/_deps/
+
+# Visual Studio / MSBuild
+*.user
+*.suo
+*.nupkg
+*.snupkg

@@ -1,0 +1,33 @@
+<!-- C# binding project file. -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Version>0.1.0</Version>
+    <Authors>Gregorian Rayne</Authors>
+    <Description>Point and Figure Chart Library - C# bindings</Description>
+    <PackageTags>finance;trading;technical-analysis;point-figure;chart</PackageTags>
+    <RepositoryUrl>https://github.com/gregorian-09/pnf-chart-system</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.6.4" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\build\bin\pnf.dll" Link="pnf_native.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' == 'Windows_NT'" />
+    <None Include="..\..\build\lib\libpnf.so" Link="pnf_native.so" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' != 'Windows_NT'" />
+    <None Include="..\..\build\lib\libpnf.dylib" Link="pnf_native.dylib" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' != 'Windows_NT' AND Exists('..\..\build\lib\libpnf.dylib')" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,11 @@
+[package]
+name = "pnf-real-world-example"
+version = "1.0.0"
+edition = "2021"
+
+[[bin]]
+name = "real_world_example"
+path = "real_world_example.rs"
+
+[dependencies]
+pnf = { path = "../../bindings/rust" }
