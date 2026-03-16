@@ -1,7 +1,3 @@
-/// <summary>
-/// File: Indicators.cs
-/// Indicators binding types and helpers.
-/// </summary>
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -9,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace PnF
 {
     /// <summary>
-    /// Indicators binding type.
+    /// Managed wrapper around native indicator calculations.
     /// </summary>
     public class Indicators : IDisposable
     {
@@ -31,10 +27,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// Configure API.
-        /// </summary>
-        /// <summary>
-        /// Configure API.
+        /// Configure.
         /// </summary>
         /// <param name="config"></param>
         public void Configure(IndicatorConfig config)
@@ -44,10 +37,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SetSmaPeriods API.
-        /// </summary>
-        /// <summary>
-        /// SetSmaPeriods API.
+        /// SetSmaPeriods.
         /// </summary>
         /// <param name="shortPeriod"></param>
         /// <param name="mediumPeriod"></param>
@@ -59,10 +49,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SetBollingerParams API.
-        /// </summary>
-        /// <summary>
-        /// SetBollingerParams API.
+        /// SetBollingerParams.
         /// </summary>
         /// <param name="period"></param>
         /// <param name="stdDevs"></param>
@@ -73,10 +60,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SetRsiParams API.
-        /// </summary>
-        /// <summary>
-        /// SetRsiParams API.
+        /// SetRsiParams.
         /// </summary>
         /// <param name="period"></param>
         /// <param name="overbought"></param>
@@ -88,10 +72,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SetBullishPercentThresholds API.
-        /// </summary>
-        /// <summary>
-        /// SetBullishPercentThresholds API.
+        /// SetBullishPercentThresholds.
         /// </summary>
         /// <param name="bullish"></param>
         /// <param name="bearish"></param>
@@ -102,10 +83,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SetSupportResistanceThreshold API.
-        /// </summary>
-        /// <summary>
-        /// SetSupportResistanceThreshold API.
+        /// SetSupportResistanceThreshold.
         /// </summary>
         /// <param name="threshold"></param>
         public void SetSupportResistanceThreshold(double threshold)
@@ -115,10 +93,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SetCongestionParams API.
-        /// </summary>
-        /// <summary>
-        /// SetCongestionParams API.
+        /// SetCongestionParams.
         /// </summary>
         /// <param name="minColumns"></param>
         /// <param name="priceRange"></param>
@@ -129,10 +104,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// Calculate API.
-        /// </summary>
-        /// <summary>
-        /// Calculate API.
+        /// Calculate.
         /// </summary>
         /// <param name="chart"></param>
         public void Calculate(Chart chart)
@@ -143,10 +115,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SmaShort API.
-        /// </summary>
-        /// <summary>
-        /// SmaShort API.
+        /// SmaShort.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -157,10 +126,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SmaMedium API.
-        /// </summary>
-        /// <summary>
-        /// SmaMedium API.
+        /// SmaMedium.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -171,10 +137,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SmaLong API.
-        /// </summary>
-        /// <summary>
-        /// SmaLong API.
+        /// SmaLong.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -185,10 +148,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SmaShortValues API.
-        /// </summary>
-        /// <summary>
-        /// SmaShortValues API.
+        /// SmaShortValues.
         /// </summary>
         /// <returns></returns>
         public double[] SmaShortValues()
@@ -198,10 +158,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SmaMediumValues API.
-        /// </summary>
-        /// <summary>
-        /// SmaMediumValues API.
+        /// SmaMediumValues.
         /// </summary>
         /// <returns></returns>
         public double[] SmaMediumValues()
@@ -211,10 +168,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// SmaLongValues API.
-        /// </summary>
-        /// <summary>
-        /// SmaLongValues API.
+        /// SmaLongValues.
         /// </summary>
         /// <returns></returns>
         public double[] SmaLongValues()
@@ -224,10 +178,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// BollingerMiddle API.
-        /// </summary>
-        /// <summary>
-        /// BollingerMiddle API.
+        /// BollingerMiddle.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -238,10 +189,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// BollingerUpper API.
-        /// </summary>
-        /// <summary>
-        /// BollingerUpper API.
+        /// BollingerUpper.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -252,10 +200,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// BollingerLower API.
-        /// </summary>
-        /// <summary>
-        /// BollingerLower API.
+        /// BollingerLower.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -266,10 +211,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// BollingerMiddleValues API.
-        /// </summary>
-        /// <summary>
-        /// BollingerMiddleValues API.
+        /// BollingerMiddleValues.
         /// </summary>
         /// <returns></returns>
         public double[] BollingerMiddleValues()
@@ -279,10 +221,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// BollingerUpperValues API.
-        /// </summary>
-        /// <summary>
-        /// BollingerUpperValues API.
+        /// BollingerUpperValues.
         /// </summary>
         /// <returns></returns>
         public double[] BollingerUpperValues()
@@ -292,10 +231,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// BollingerLowerValues API.
-        /// </summary>
-        /// <summary>
-        /// BollingerLowerValues API.
+        /// BollingerLowerValues.
         /// </summary>
         /// <returns></returns>
         public double[] BollingerLowerValues()
@@ -305,10 +241,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// Rsi API.
-        /// </summary>
-        /// <summary>
-        /// Rsi API.
+        /// Rsi.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -319,10 +252,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// RsiIsOverbought API.
-        /// </summary>
-        /// <summary>
-        /// RsiIsOverbought API.
+        /// RsiIsOverbought.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -333,10 +263,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// RsiIsOversold API.
-        /// </summary>
-        /// <summary>
-        /// RsiIsOversold API.
+        /// RsiIsOversold.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -347,10 +274,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// RsiValues API.
-        /// </summary>
-        /// <summary>
-        /// RsiValues API.
+        /// RsiValues.
         /// </summary>
         /// <returns></returns>
         public double[] RsiValues()
@@ -360,10 +284,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// Obv API.
-        /// </summary>
-        /// <summary>
-        /// Obv API.
+        /// Obv.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -374,10 +295,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// ObvValues API.
-        /// </summary>
-        /// <summary>
-        /// ObvValues API.
+        /// ObvValues.
         /// </summary>
         /// <returns></returns>
         public double[] ObvValues()
@@ -450,10 +368,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetSignals API.
-        /// </summary>
-        /// <summary>
-        /// GetSignals API.
+        /// GetSignals.
         /// </summary>
         /// <returns></returns>
         public List<Signal> GetSignals()
@@ -503,10 +418,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetPatterns API.
-        /// </summary>
-        /// <summary>
-        /// GetPatterns API.
+        /// GetPatterns.
         /// </summary>
         /// <returns></returns>
         public List<Pattern> GetPatterns()
@@ -529,10 +441,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetBullishPatterns API.
-        /// </summary>
-        /// <summary>
-        /// GetBullishPatterns API.
+        /// GetBullishPatterns.
         /// </summary>
         /// <returns></returns>
         public List<Pattern> GetBullishPatterns()
@@ -555,10 +464,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetBearishPatterns API.
-        /// </summary>
-        /// <summary>
-        /// GetBearishPatterns API.
+        /// GetBearishPatterns.
         /// </summary>
         /// <returns></returns>
         public List<Pattern> GetBearishPatterns()
@@ -599,10 +505,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// IsNearSupport API.
-        /// </summary>
-        /// <summary>
-        /// IsNearSupport API.
+        /// IsNearSupport.
         /// </summary>
         /// <param name="price"></param>
         /// <param name="tolerance"></param>
@@ -614,10 +517,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// IsNearResistance API.
-        /// </summary>
-        /// <summary>
-        /// IsNearResistance API.
+        /// IsNearResistance.
         /// </summary>
         /// <param name="price"></param>
         /// <param name="tolerance"></param>
@@ -629,10 +529,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetSupportLevels API.
-        /// </summary>
-        /// <summary>
-        /// GetSupportLevels API.
+        /// GetSupportLevels.
         /// </summary>
         /// <returns></returns>
         public List<SupportResistanceLevel> GetSupportLevels()
@@ -655,10 +552,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetResistanceLevels API.
-        /// </summary>
-        /// <summary>
-        /// GetResistanceLevels API.
+        /// GetResistanceLevels.
         /// </summary>
         /// <returns></returns>
         public List<SupportResistanceLevel> GetResistanceLevels()
@@ -681,10 +575,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetSupportPrices API.
-        /// </summary>
-        /// <summary>
-        /// GetSupportPrices API.
+        /// GetSupportPrices.
         /// </summary>
         /// <returns></returns>
         public double[] GetSupportPrices()
@@ -694,10 +585,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetResistancePrices API.
-        /// </summary>
-        /// <summary>
-        /// GetResistancePrices API.
+        /// GetResistancePrices.
         /// </summary>
         /// <returns></returns>
         public double[] GetResistancePrices()
@@ -707,10 +595,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// IsInCongestion API.
-        /// </summary>
-        /// <summary>
-        /// IsInCongestion API.
+        /// IsInCongestion.
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
@@ -730,10 +615,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// Summary API.
-        /// </summary>
-        /// <summary>
-        /// Summary API.
+        /// Summary.
         /// </summary>
         /// <returns></returns>
         public string Summary()
@@ -747,10 +629,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// ToString API.
-        /// </summary>
-        /// <summary>
-        /// ToString API.
+        /// Returns a readable summary string.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -799,10 +678,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// Dispose API.
-        /// </summary>
-        /// <summary>
-        /// Dispose API.
+        /// Releases unmanaged resources.
         /// </summary>
         public void Dispose()
         {

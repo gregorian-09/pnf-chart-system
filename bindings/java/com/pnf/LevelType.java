@@ -1,8 +1,11 @@
-/**
- */
 package com.pnf;
 
 /**
- * LevelType binding type.
+ * Support/resistance level classification.
  */
-public enum LevelType { SUPPORT, RESISTANCE }
+public enum LevelType {
+    /** Support level. */
+    SUPPORT,
+    /** Resistance level. */
+    RESISTANCE
+}

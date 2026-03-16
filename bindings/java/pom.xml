@@ -129,6 +129,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.4.0</version>
+                <configuration>
+                    <excludes>
+                        <exclude>target/**</exclude>
+                        <exclude>native/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -154,6 +160,7 @@
                 <configuration>
                     <sourcepath>.</sourcepath>
                     <subpackages>com.pnf</subpackages>
+                    <excludePackageNames>com.pnf.test</excludePackageNames>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>

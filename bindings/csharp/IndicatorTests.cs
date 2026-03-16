@@ -1,23 +1,16 @@
-/// <summary>
-/// File: IndicatorTests.cs
-/// IndicatorTests binding types and helpers.
-/// </summary>
 using System;
 using Xunit;
 
 namespace PnF.Tests
 {
     /// <summary>
-    /// IndicatorTests binding type.
+    /// Unit tests for indicator behavior.
     /// </summary>
     public class IndicatorTests
     {
         [Fact]
         /// <summary>
-        /// Indicators_CanCreate API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_CanCreate API.
+        /// Indicators_CanCreate.
         /// </summary>
         public void Indicators_CanCreate()
         {
@@ -27,10 +20,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_CanCreateWithConfig API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_CanCreateWithConfig API.
+        /// Indicators_CanCreateWithConfig.
         /// </summary>
         public void Indicators_CanCreateWithConfig()
         {
@@ -41,10 +31,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_CanCalculate API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_CanCalculate API.
+        /// Indicators_CanCalculate.
         /// </summary>
         public void Indicators_CanCalculate()
         {
@@ -65,10 +52,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_SmaValues API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_SmaValues API.
+        /// Indicators_SmaValues.
         /// </summary>
         public void Indicators_SmaValues()
         {
@@ -94,10 +78,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_BollingerValues API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_BollingerValues API.
+        /// Indicators_BollingerValues.
         /// </summary>
         public void Indicators_BollingerValues()
         {
@@ -123,10 +104,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_RsiValues API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_RsiValues API.
+        /// Indicators_RsiValues.
         /// </summary>
         public void Indicators_RsiValues()
         {
@@ -147,10 +125,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_Signals API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_Signals API.
+        /// Indicators_Signals.
         /// </summary>
         public void Indicators_Signals()
         {
@@ -177,10 +152,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_Patterns API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_Patterns API.
+        /// Indicators_Patterns.
         /// </summary>
         public void Indicators_Patterns()
         {
@@ -208,10 +180,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_SupportResistance API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_SupportResistance API.
+        /// Indicators_SupportResistance.
         /// </summary>
         public void Indicators_SupportResistance()
         {
@@ -242,10 +211,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_ConfigurationMethods API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_ConfigurationMethods API.
+        /// Indicators_ConfigurationMethods.
         /// </summary>
         public void Indicators_ConfigurationMethods()
         {
@@ -272,10 +238,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_AlertsWork API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_AlertsWork API.
+        /// Indicators_AlertsWork.
         /// </summary>
         public void Indicators_AlertsWork()
         {
@@ -298,10 +261,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_SummaryWorks API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_SummaryWorks API.
+        /// Indicators_SummaryWorks.
         /// </summary>
         public void Indicators_SummaryWorks()
         {
@@ -325,10 +285,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Indicators_DisposedThrows API.
-        /// </summary>
-        /// <summary>
-        /// Indicators_DisposedThrows API.
+        /// Indicators_DisposedThrows.
         /// </summary>
         public void Indicators_DisposedThrows()
         {

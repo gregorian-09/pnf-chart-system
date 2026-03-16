@@ -1,4 +1,4 @@
-//! indicators module for Rust bindings.
+//! Safe wrapper around native indicator calculations and result accessors.
 use crate::chart::Chart;
 use crate::ffi;
 use crate::types::*;
@@ -11,21 +11,12 @@ pub struct Indicators {
 
 impl Indicators {
     /// Creates new indicators with default configuration.
-    ///
-    /// # Returns
-    /// 
     pub fn new() -> Self {
         let ptr = unsafe { ffi::pnf_indicators_create_default() };
         Self { ptr }
     }
 
     /// Creates new indicators with the specified configuration.
-    ///
-    /// # Arguments
-    /// * `config` - 
-    ///
-    /// # Returns
-    /// 
     pub fn with_config(config: IndicatorConfig) -> Self {
         let ffi_config = config.to_ffi();
         let ptr = unsafe { ffi::pnf_indicators_create_with_config(&ffi_config) };
@@ -33,128 +24,62 @@ impl Indicators {
     }
 
     /// Configures the indicators with new settings.
-    ///
-    /// # Arguments
-    /// * `&mut self` - 
-    /// * `config` - 
     pub fn configure(&mut self, config: IndicatorConfig) {
         let ffi_config = config.to_ffi();
         unsafe { ffi::pnf_indicators_configure(self.ptr, &ffi_config) }
     }
 
     /// Sets the periods for simple moving averages.
-    ///
-    /// # Arguments
-    /// * `&mut self` - 
-    /// * `short` - 
-    /// * `medium` - 
-    /// * `long` - 
     pub fn set_sma_periods(&mut self, short: i32, medium: i32, long: i32) {
         unsafe { ffi::pnf_indicators_set_sma_periods(self.ptr, short, medium, long) }
     }
 
     /// Sets the parameters for Bollinger Bands.
-    ///
-    /// # Arguments
-    /// * `&mut self` - 
-    /// * `period` - 
-    /// * `std_devs` - 
     pub fn set_bollinger_params(&mut self, period: i32, std_devs: f64) {
         unsafe { ffi::pnf_indicators_set_bollinger_params(self.ptr, period, std_devs) }
     }
 
     /// Sets the parameters for RSI.
-    ///
-    /// # Arguments
-    /// * `&mut self` - 
-    /// * `period` - 
-    /// * `overbought` - 
-    /// * `oversold` - 
     pub fn set_rsi_params(&mut self, period: i32, overbought: f64, oversold: f64) {
         unsafe { ffi::pnf_indicators_set_rsi_params(self.ptr, period, overbought, oversold) }
     }
 
     /// Sets the bullish percent alert thresholds.
-    ///
-    /// # Arguments
-    /// * `&mut self` - 
-    /// * `bullish` - 
-    /// * `bearish` - 
     pub fn set_bullish_percent_thresholds(&mut self, bullish: f64, bearish: f64) {
         unsafe { ffi::pnf_indicators_set_bullish_percent_thresholds(self.ptr, bullish, bearish) }
     }
 
     /// Sets the threshold for merging support/resistance levels.
-    ///
-    /// # Arguments
-    /// * `&mut self` - 
-    /// * `threshold` - 
     pub fn set_support_resistance_threshold(&mut self, threshold: f64) {
         unsafe { ffi::pnf_indicators_set_support_resistance_threshold(self.ptr, threshold) }
     }
 
     /// Sets the parameters for congestion zone detection.
-    ///
-    /// # Arguments
-    /// * `&mut self` - 
-    /// * `min_columns` - 
-    /// * `price_range` - 
     pub fn set_congestion_params(&mut self, min_columns: i32, price_range: f64) {
         unsafe { ffi::pnf_indicators_set_congestion_params(self.ptr, min_columns, price_range) }
     }
 
     /// Calculates all indicators for the given chart.
-    ///
-    /// # Arguments
-    /// * `&mut self` - 
-    /// * `chart` - 
     pub fn calculate(&mut self, chart: &Chart) {
         unsafe { ffi::pnf_indicators_calculate(self.ptr, chart.as_ptr()) }
     }
 
     /// Returns the short-term SMA value for a specific column.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn sma_short(&self, column: i32) -> f64 {
         unsafe { ffi::pnf_indicators_sma_short(self.ptr, column) }
     }
 
     /// Returns the medium-term SMA value for a specific column.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn sma_medium(&self, column: i32) -> f64 {
         unsafe { ffi::pnf_indicators_sma_medium(self.ptr, column) }
     }
 
     /// Returns the long-term SMA value for a specific column.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn sma_long(&self, column: i32) -> f64 {
         unsafe { ffi::pnf_indicators_sma_long(self.ptr, column) }
     }
 
     /// Returns all short-term SMA values.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn sma_short_values(&self) -> Vec<f64> {
         let arr = unsafe { ffi::pnf_indicators_sma_short_values(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -164,12 +89,6 @@ impl Indicators {
     }
 
     /// Returns all medium-term SMA values.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn sma_medium_values(&self) -> Vec<f64> {
         let arr = unsafe { ffi::pnf_indicators_sma_medium_values(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -179,12 +98,6 @@ impl Indicators {
     }
 
     /// Returns all long-term SMA values.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn sma_long_values(&self) -> Vec<f64> {
         let arr = unsafe { ffi::pnf_indicators_sma_long_values(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -194,48 +107,21 @@ impl Indicators {
     }
 
     /// Returns the Bollinger Bands middle value for a specific column.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bollinger_middle(&self, column: i32) -> f64 {
         unsafe { ffi::pnf_indicators_bollinger_middle(self.ptr, column) }
     }
 
     /// Returns the Bollinger Bands upper value for a specific column.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bollinger_upper(&self, column: i32) -> f64 {
         unsafe { ffi::pnf_indicators_bollinger_upper(self.ptr, column) }
     }
 
     /// Returns the Bollinger Bands lower value for a specific column.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bollinger_lower(&self, column: i32) -> f64 {
         unsafe { ffi::pnf_indicators_bollinger_lower(self.ptr, column) }
     }
 
     /// Returns all Bollinger Bands middle values.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bollinger_middle_values(&self) -> Vec<f64> {
         let arr = unsafe { ffi::pnf_indicators_bollinger_middle_values(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -245,12 +131,6 @@ impl Indicators {
     }
 
     /// Returns all Bollinger Bands upper values.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bollinger_upper_values(&self) -> Vec<f64> {
         let arr = unsafe { ffi::pnf_indicators_bollinger_upper_values(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -260,12 +140,6 @@ impl Indicators {
     }
 
     /// Returns all Bollinger Bands lower values.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bollinger_lower_values(&self) -> Vec<f64> {
         let arr = unsafe { ffi::pnf_indicators_bollinger_lower_values(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -275,48 +149,21 @@ impl Indicators {
     }
 
     /// Returns the RSI value for a specific column.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn rsi(&self, column: i32) -> f64 {
         unsafe { ffi::pnf_indicators_rsi(self.ptr, column) }
     }
 
     /// Checks if RSI is in overbought territory for a specific column.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn rsi_is_overbought(&self, column: i32) -> bool {
         unsafe { ffi::pnf_indicators_rsi_is_overbought(self.ptr, column) }
     }
 
     /// Checks if RSI is in oversold territory for a specific column.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn rsi_is_oversold(&self, column: i32) -> bool {
         unsafe { ffi::pnf_indicators_rsi_is_oversold(self.ptr, column) }
     }
 
     /// Returns all RSI values.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn rsi_values(&self) -> Vec<f64> {
         let arr = unsafe { ffi::pnf_indicators_rsi_values(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -326,24 +173,11 @@ impl Indicators {
     }
 
     /// Returns the OBV value for a specific column.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn obv(&self, column: i32) -> f64 {
         unsafe { ffi::pnf_indicators_obv(self.ptr, column) }
     }
 
     /// Returns all OBV values.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn obv_values(&self) -> Vec<f64> {
         let arr = unsafe { ffi::pnf_indicators_obv_values(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -353,68 +187,32 @@ impl Indicators {
     }
 
     /// Returns the bullish percent value.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bullish_percent(&self) -> f64 {
         unsafe { ffi::pnf_indicators_bullish_percent(self.ptr) }
     }
 
     /// Checks if there is a bullish alert.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn is_bullish_alert(&self) -> bool {
         unsafe { ffi::pnf_indicators_is_bullish_alert(self.ptr) }
     }
 
     /// Checks if there is a bearish alert.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn is_bearish_alert(&self) -> bool {
         unsafe { ffi::pnf_indicators_is_bearish_alert(self.ptr) }
     }
 
     /// Returns the current signal type.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn current_signal(&self) -> SignalType {
         let st = unsafe { ffi::pnf_indicators_current_signal(self.ptr) };
         SignalType::from_ffi(st)
     }
 
     /// Returns the total number of signals.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn signal_count(&self) -> usize {
         unsafe { ffi::pnf_indicators_signal_count(self.ptr) }
     }
 
     /// Returns all detected signals.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn signals(&self) -> Vec<Signal> {
         let arr = unsafe { ffi::pnf_indicators_signals(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -424,67 +222,31 @@ impl Indicators {
     }
 
     /// Returns the number of buy signals.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn buy_signal_count(&self) -> i32 {
         unsafe { ffi::pnf_indicators_buy_signal_count(self.ptr) }
     }
 
     /// Returns the number of sell signals.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn sell_signal_count(&self) -> i32 {
         unsafe { ffi::pnf_indicators_sell_signal_count(self.ptr) }
     }
 
     /// Returns the total number of patterns.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn pattern_count(&self) -> usize {
         unsafe { ffi::pnf_indicators_pattern_count(self.ptr) }
     }
 
     /// Returns the number of bullish patterns.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bullish_pattern_count(&self) -> usize {
         unsafe { ffi::pnf_indicators_bullish_pattern_count(self.ptr) }
     }
 
     /// Returns the number of bearish patterns.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bearish_pattern_count(&self) -> usize {
         unsafe { ffi::pnf_indicators_bearish_pattern_count(self.ptr) }
     }
 
     /// Returns all detected patterns.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn patterns(&self) -> Vec<Pattern> {
         let arr = unsafe { ffi::pnf_indicators_patterns(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -494,12 +256,6 @@ impl Indicators {
     }
 
     /// Returns all bullish patterns.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bullish_patterns(&self) -> Vec<Pattern> {
         let arr = unsafe { ffi::pnf_indicators_bullish_patterns(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -509,12 +265,6 @@ impl Indicators {
     }
 
     /// Returns all bearish patterns.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn bearish_patterns(&self) -> Vec<Pattern> {
         let arr = unsafe { ffi::pnf_indicators_bearish_patterns(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -524,60 +274,26 @@ impl Indicators {
     }
 
     /// Returns the number of support levels.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn support_level_count(&self) -> usize {
         unsafe { ffi::pnf_indicators_support_level_count(self.ptr) }
     }
 
     /// Returns the number of resistance levels.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn resistance_level_count(&self) -> usize {
         unsafe { ffi::pnf_indicators_resistance_level_count(self.ptr) }
     }
 
     /// Checks if the price is near a support level.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `price` - 
-    /// * `tolerance` - 
-    ///
-    /// # Returns
-    /// 
     pub fn is_near_support(&self, price: f64, tolerance: f64) -> bool {
         unsafe { ffi::pnf_indicators_is_near_support(self.ptr, price, tolerance) }
     }
 
     /// Checks if the price is near a resistance level.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `price` - 
-    /// * `tolerance` - 
-    ///
-    /// # Returns
-    /// 
     pub fn is_near_resistance(&self, price: f64, tolerance: f64) -> bool {
         unsafe { ffi::pnf_indicators_is_near_resistance(self.ptr, price, tolerance) }
     }
 
     /// Returns all support levels.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn support_levels(&self) -> Vec<SupportResistanceLevel> {
         let arr = unsafe { ffi::pnf_indicators_support_levels(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -590,12 +306,6 @@ impl Indicators {
     }
 
     /// Returns all resistance levels.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn resistance_levels(&self) -> Vec<SupportResistanceLevel> {
         let arr = unsafe { ffi::pnf_indicators_resistance_levels(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -608,12 +318,6 @@ impl Indicators {
     }
 
     /// Returns all support prices.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn support_prices(&self) -> Vec<f64> {
         let arr = unsafe { ffi::pnf_indicators_support_prices(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -623,12 +327,6 @@ impl Indicators {
     }
 
     /// Returns all resistance prices.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn resistance_prices(&self) -> Vec<f64> {
         let arr = unsafe { ffi::pnf_indicators_resistance_prices(self.ptr) };
         let slice = unsafe { slice::from_raw_parts(arr.data, arr.length) };
@@ -638,35 +336,16 @@ impl Indicators {
     }
 
     /// Checks if a column is in a congestion zone.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    /// * `column` - 
-    ///
-    /// # Returns
-    /// 
     pub fn is_in_congestion(&self, column: i32) -> bool {
         unsafe { ffi::pnf_indicators_is_in_congestion(self.ptr, column) }
     }
 
     /// Returns the number of congestion zones.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn congestion_zone_count(&self) -> usize {
         unsafe { ffi::pnf_indicators_congestion_zone_count(self.ptr) }
     }
 
     /// Returns a summary of all indicators.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn summary(&self) -> Option<String> {
         let ptr = unsafe { ffi::pnf_indicators_summary(self.ptr) };
         let result = cstr_to_string(ptr);
@@ -677,12 +356,6 @@ impl Indicators {
     }
 
     /// Returns a string representation of all indicators.
-    ///
-    /// # Arguments
-    /// * `&self` - 
-    ///
-    /// # Returns
-    /// 
     pub fn to_string(&self) -> Option<String> {
         let ptr = unsafe { ffi::pnf_indicators_to_string(self.ptr) };
         let result = cstr_to_string(ptr);

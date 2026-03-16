@@ -1,14 +1,10 @@
-/// <summary>
-/// File: Types.cs
-/// Types binding types and helpers.
-/// </summary>
 using System;
 using System.Runtime.InteropServices;
 
 namespace PnF
 {
     /// <summary>
-    /// BoxType binding type.
+    /// Marker used for chart boxes.
     /// </summary>
     public enum BoxType
     {
@@ -17,7 +13,7 @@ namespace PnF
     }
 
     /// <summary>
-    /// ColumnType binding type.
+    /// Direction of a Point and Figure column.
     /// </summary>
     public enum ColumnType
     {
@@ -27,7 +23,7 @@ namespace PnF
     }
 
     /// <summary>
-    /// ConstructionMethod binding type.
+    /// Input method used when building columns.
     /// </summary>
     public enum ConstructionMethod
     {
@@ -36,7 +32,7 @@ namespace PnF
     }
 
     /// <summary>
-    /// BoxSizeMethod binding type.
+    /// Strategy used to determine box size.
     /// </summary>
     public enum BoxSizeMethod
     {
@@ -47,7 +43,7 @@ namespace PnF
     }
 
     /// <summary>
-    /// SignalType binding type.
+    /// Direction of a generated signal.
     /// </summary>
     public enum SignalType
     {
@@ -57,7 +53,7 @@ namespace PnF
     }
 
     /// <summary>
-    /// PatternType binding type.
+    /// Pattern classification emitted by indicators.
     /// </summary>
     public enum PatternType
     {
@@ -87,7 +83,7 @@ namespace PnF
 
     [StructLayout(LayoutKind.Sequential)]
     /// <summary>
-    /// ChartConfig binding type.
+    /// Chart construction configuration.
     /// </summary>
     public struct ChartConfig
     {
@@ -97,10 +93,7 @@ namespace PnF
         public int Reversal;
 
         /// <summary>
-        /// Default API.
-        /// </summary>
-        /// <summary>
-        /// Default API.
+        /// Returns default configuration values.
         /// </summary>
         /// <returns></returns>
         public static ChartConfig Default()
@@ -117,7 +110,7 @@ namespace PnF
 
     [StructLayout(LayoutKind.Sequential)]
     /// <summary>
-    /// IndicatorConfig binding type.
+    /// Indicator calculation configuration.
     /// </summary>
     public struct IndicatorConfig
     {
@@ -136,10 +129,7 @@ namespace PnF
         public double CongestionPriceRange;
 
         /// <summary>
-        /// Default API.
-        /// </summary>
-        /// <summary>
-        /// Default API.
+        /// Returns default configuration values.
         /// </summary>
         /// <returns></returns>
         public static IndicatorConfig Default()
@@ -165,7 +155,7 @@ namespace PnF
 
     [StructLayout(LayoutKind.Sequential)]
     /// <summary>
-    /// OHLC binding type.
+    /// OHLC candle input.
     /// </summary>
     public struct OHLC
     {
@@ -186,7 +176,7 @@ namespace PnF
     }
 
     /// <summary>
-    /// Signal binding type.
+    /// Signal model returned by indicators.
     /// </summary>
     public class Signal
     {
@@ -202,10 +192,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// ToString API.
-        /// </summary>
-        /// <summary>
-        /// ToString API.
+        /// Returns a readable summary string.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -226,7 +213,7 @@ namespace PnF
     }
 
     /// <summary>
-    /// Pattern binding type.
+    /// Pattern model returned by indicators.
     /// </summary>
     public class Pattern
     {
@@ -246,10 +233,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// ToString API.
-        /// </summary>
-        /// <summary>
-        /// ToString API.
+        /// Returns a readable summary string.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -268,7 +252,7 @@ namespace PnF
     }
 
     /// <summary>
-    /// SupportResistanceLevel binding type.
+    /// Support/resistance level model.
     /// </summary>
     public class SupportResistanceLevel
     {
@@ -284,10 +268,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// ToString API.
-        /// </summary>
-        /// <summary>
-        /// ToString API.
+        /// Returns a readable summary string.
         /// </summary>
         /// <returns></returns>
         public override string ToString()

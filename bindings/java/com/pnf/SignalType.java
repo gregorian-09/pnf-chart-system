@@ -1,8 +1,13 @@
-/**
- */
 package com.pnf;
 
 /**
- * SignalType binding type.
+ * Trading signal direction.
  */
-public enum SignalType { NONE, BUY, SELL }
+public enum SignalType {
+    /** No active signal. */
+    NONE,
+    /** Buy signal. */
+    BUY,
+    /** Sell signal. */
+    SELL
+}

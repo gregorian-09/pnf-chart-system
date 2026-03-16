@@ -119,6 +119,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/gregorian-09/pnf-chart-system",
     ext_modules=ext_modules,
+    py_modules=["pypnf_dashboard"],
     cmdclass=cmdclass,
     python_requires=">=3.8",
     classifiers=[

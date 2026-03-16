@@ -1,17 +1,17 @@
-//! types module for Rust bindings.
+//! Public data types shared by the safe Rust API.
 use crate::ffi;
 use std::ffi::CStr;
 use std::os::raw::c_int;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-/// BoxType binding API.
+/// Marker used for each filled box in a column.
 pub enum BoxType {
     X,
     O,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-/// ColumnType binding API.
+/// Direction of a Point and Figure column.
 pub enum ColumnType {
     X,
     O,
@@ -19,14 +19,14 @@ pub enum ColumnType {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-/// ConstructionMethod binding API.
+/// Input method used when constructing columns from price data.
 pub enum ConstructionMethod {
     Close,
     HighLow,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-/// BoxSizeMethod binding API.
+/// Strategy used to determine chart box size.
 pub enum BoxSizeMethod {
     Fixed,
     Traditional,
@@ -35,7 +35,7 @@ pub enum BoxSizeMethod {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-/// SignalType binding API.
+/// Direction of a generated signal.
 pub enum SignalType {
     None,
     Buy,
@@ -43,7 +43,7 @@ pub enum SignalType {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-/// PatternType binding API.
+/// Supported Point and Figure pattern classifications.
 pub enum PatternType {
     None,
     DoubleTopBreakout,
@@ -69,9 +69,8 @@ pub enum PatternType {
     SpreadTripleBottom,
 }
 
-/// Configuration for Point & Figure chart construction.
 #[derive(Debug, Clone, Copy)]
-/// ChartConfig binding API.
+/// Configuration used when constructing a [`Chart`](crate::Chart).
 pub struct ChartConfig {
     pub method: ConstructionMethod,
     pub box_size_method: BoxSizeMethod,
@@ -87,10 +86,7 @@ impl Default for ChartConfig {
 }
 
 impl ChartConfig {
-    /// new binding API.
-    ///
-    /// # Returns
-    /// 
+    /// Creates a default configuration.
     pub fn new() -> Self {
         Self::default()
     }
@@ -114,9 +110,8 @@ impl ChartConfig {
     }
 }
 
-/// Configuration for technical indicators.
 #[derive(Debug, Clone, Copy)]
-/// IndicatorConfig binding API.
+/// Configuration used when constructing [`Indicators`](crate::Indicators).
 pub struct IndicatorConfig {
     pub sma_short_period: i32,
     pub sma_medium_period: i32,
@@ -141,10 +136,7 @@ impl Default for IndicatorConfig {
 }
 
 impl IndicatorConfig {
-    /// new binding API.
-    ///
-    /// # Returns
-    /// 
+    /// Creates a default configuration.
     pub fn new() -> Self {
         Self::default()
     }
@@ -186,9 +178,8 @@ impl IndicatorConfig {
     }
 }
 
-/// OHLC data point with timestamp and volume.
 #[derive(Debug, Clone, Copy)]
-/// OHLC binding API.
+/// OHLC candle input used by `Chart::add_ohlc`.
 pub struct OHLC {
     pub timestamp: i64,
     pub open: f64,
@@ -211,9 +202,8 @@ impl OHLC {
     }
 }
 
-/// Trading signal detected in the chart.
 #[derive(Debug, Clone, Copy)]
-/// Signal binding API.
+/// Signal event emitted by indicator analysis.
 pub struct Signal {
     pub signal_type: SignalType,
     pub column_index: i32,
@@ -230,9 +220,8 @@ impl Signal {
     }
 }
 
-/// Chart pattern detected in the chart.
 #[derive(Debug, Clone, Copy)]
-/// Pattern binding API.
+/// Pattern event detected by indicator analysis.
 pub struct Pattern {
     pub pattern_type: PatternType,
     pub start_column: i32,
@@ -253,9 +242,8 @@ impl Pattern {
     }
 }
 
-/// Support or resistance level.
 #[derive(Debug, Clone, Copy)]
-/// SupportResistanceLevel binding API.
+/// Support or resistance level with touch statistics.
 pub struct SupportResistanceLevel {
     pub price: f64,
     pub touch_count: i32,
@@ -274,7 +262,7 @@ impl SupportResistanceLevel {
 
 /// Column data for export.
 #[derive(Debug, Clone, Copy)]
-/// ColumnData binding API.
+/// Snapshot of a chart column returned by native APIs.
 pub struct ColumnData {
     pub index: i32,
     pub column_type: ColumnType,

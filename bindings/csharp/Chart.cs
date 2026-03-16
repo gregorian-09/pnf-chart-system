@@ -1,14 +1,10 @@
-/// <summary>
-/// File: Chart.cs
-/// Chart binding types and helpers.
-/// </summary>
 using System;
 using System.Runtime.InteropServices;
 
 namespace PnF
 {
     /// <summary>
-    /// Chart binding type.
+    /// Managed wrapper around a native Point and Figure chart.
     /// </summary>
     public class Chart : IDisposable
     {
@@ -30,10 +26,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// AddData API.
-        /// </summary>
-        /// <summary>
-        /// AddData API.
+        /// AddData.
         /// </summary>
         /// <param name="high"></param>
         /// <param name="low"></param>
@@ -47,10 +40,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// AddPrice API.
-        /// </summary>
-        /// <summary>
-        /// AddPrice API.
+        /// AddPrice.
         /// </summary>
         /// <param name="price"></param>
         /// <param name="timestamp"></param>
@@ -62,10 +52,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// AddOHLC API.
-        /// </summary>
-        /// <summary>
-        /// AddOHLC API.
+        /// AddOHLC.
         /// </summary>
         /// <param name="ohlc"></param>
         /// <returns></returns>
@@ -112,10 +99,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetColumnType API.
-        /// </summary>
-        /// <summary>
-        /// GetColumnType API.
+        /// GetColumnType.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -126,10 +110,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetColumnBoxCount API.
-        /// </summary>
-        /// <summary>
-        /// GetColumnBoxCount API.
+        /// GetColumnBoxCount.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -140,10 +121,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetColumnHighest API.
-        /// </summary>
-        /// <summary>
-        /// GetColumnHighest API.
+        /// GetColumnHighest.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -154,10 +132,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetColumnLowest API.
-        /// </summary>
-        /// <summary>
-        /// GetColumnLowest API.
+        /// GetColumnLowest.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -168,10 +143,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetBoxPrice API.
-        /// </summary>
-        /// <summary>
-        /// GetBoxPrice API.
+        /// GetBoxPrice.
         /// </summary>
         /// <param name="columnIndex"></param>
         /// <param name="boxIndex"></param>
@@ -183,10 +155,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// GetBoxType API.
-        /// </summary>
-        /// <summary>
-        /// GetBoxType API.
+        /// GetBoxType.
         /// </summary>
         /// <param name="columnIndex"></param>
         /// <param name="boxIndex"></param>
@@ -226,10 +195,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// IsAboveBullishSupport API.
-        /// </summary>
-        /// <summary>
-        /// IsAboveBullishSupport API.
+        /// IsAboveBullishSupport.
         /// </summary>
         /// <param name="price"></param>
         /// <returns></returns>
@@ -240,10 +206,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// IsBelowBearishResistance API.
-        /// </summary>
-        /// <summary>
-        /// IsBelowBearishResistance API.
+        /// IsBelowBearishResistance.
         /// </summary>
         /// <param name="price"></param>
         /// <returns></returns>
@@ -254,10 +217,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// Clear API.
-        /// </summary>
-        /// <summary>
-        /// Clear API.
+        /// Clear.
         /// </summary>
         public void Clear()
         {
@@ -266,10 +226,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// ToString API.
-        /// </summary>
-        /// <summary>
-        /// ToString API.
+        /// Returns a readable summary string.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -283,10 +240,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// ToAscii API.
-        /// </summary>
-        /// <summary>
-        /// ToAscii API.
+        /// ToAscii.
         /// </summary>
         /// <returns></returns>
         public string ToAscii()
@@ -300,10 +254,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// ToJson API.
-        /// </summary>
-        /// <summary>
-        /// ToJson API.
+        /// ToJson.
         /// </summary>
         /// <returns></returns>
         public string ToJson()
@@ -343,10 +294,7 @@ namespace PnF
         }
 
         /// <summary>
-        /// Dispose API.
-        /// </summary>
-        /// <summary>
-        /// Dispose API.
+        /// Releases unmanaged resources.
         /// </summary>
         public void Dispose()
         {

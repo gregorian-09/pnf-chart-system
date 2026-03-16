@@ -1,8 +1,11 @@
-/**
- */
 package com.pnf;
 
 /**
- * BoxType binding type.
+ * Box marker type used in a Point and Figure column.
  */
-public enum BoxType { X, O }
+public enum BoxType {
+    /** Rising price box (X). */
+    X,
+    /** Falling price box (O). */
+    O
+}

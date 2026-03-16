@@ -7,6 +7,8 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591;1587</NoWarn>
+    <SkipTestSupport Condition="'$(SkipTestSupport)' == ''">false</SkipTestSupport>
     <Version>0.1.0</Version>
     <Authors>Gregorian Rayne</Authors>
     <Description>Point and Figure Chart Library - C# bindings</Description>
@@ -15,13 +17,18 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(SkipTestSupport)' != 'true'">
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.6.4" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(SkipTestSupport)' == 'true'">
+    <Compile Remove="ChartTests.cs" />
+    <Compile Remove="IndicatorTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

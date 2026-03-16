@@ -1,5 +1,10 @@
 /// \file pnf_java.cpp
-/// \brief JNI bindings for the Java API.
+/// \brief JNI bridge for the Java bindings.
+/// \details
+/// This file exposes the native entry points consumed by `com.pnf.Chart`
+/// and `com.pnf.Indicators`. Each JNI function converts Java primitives and
+/// enum ordinals into native C++ types, delegates work to the core engine,
+/// and translates results back into Java-friendly values.
 
 #include <jni.h>
 #include "pnf/pnf.hpp"
@@ -11,9 +16,9 @@ using namespace pnf;
 
 extern "C" {
 
-// ==============================================
-// Chart Native Methods
-// ==============================================
+/// \name Chart JNI methods
+/// \brief Lifecycle, mutation, and query calls backing `com.pnf.Chart`.
+/// @{
 
 JNIEXPORT jlong JNICALL
 Java_com_pnf_Chart_nativeCreate(JNIEnv* env, jclass clazz) {
@@ -121,6 +126,43 @@ Java_com_pnf_Chart_nativeColumnLowest(JNIEnv* env, jclass clazz, jlong ptr, jint
     return 0.0;
 }
 
+JNIEXPORT jdouble JNICALL
+Java_com_pnf_Chart_nativeBoxPrice(JNIEnv* env, jclass clazz, jlong ptr, jint columnIndex, jint boxIndex) {
+    Chart* chart = reinterpret_cast<Chart*>(ptr);
+    Column* col = chart->column(columnIndex);
+    if (col) {
+        if (const Box* box = col->get_box_at(boxIndex)) {
+            return box->price();
+        }
+    }
+    return 0.0;
+}
+
+JNIEXPORT jint JNICALL
+Java_com_pnf_Chart_nativeBoxType(JNIEnv* env, jclass clazz, jlong ptr, jint columnIndex, jint boxIndex) {
+    Chart* chart = reinterpret_cast<Chart*>(ptr);
+    Column* col = chart->column(columnIndex);
+    if (col) {
+        if (const Box* box = col->get_box_at(boxIndex)) {
+            return static_cast<jint>(box->type());
+        }
+    }
+    return static_cast<jint>(BoxType::X);
+}
+
+JNIEXPORT jstring JNICALL
+Java_com_pnf_Chart_nativeBoxMarker(JNIEnv* env, jclass clazz, jlong ptr, jint columnIndex, jint boxIndex) {
+    Chart* chart = reinterpret_cast<Chart*>(ptr);
+    Column* col = chart->column(columnIndex);
+    if (col) {
+        if (const Box* box = col->get_box_at(boxIndex)) {
+            const std::string marker = box->marker();
+            return env->NewStringUTF(marker.c_str());
+        }
+    }
+    return env->NewStringUTF("");
+}
+
 JNIEXPORT jboolean JNICALL
 Java_com_pnf_Chart_nativeHasBullishBias(JNIEnv* env, jclass clazz, jlong ptr) {
     Chart* chart = reinterpret_cast<Chart*>(ptr);
@@ -146,9 +188,18 @@ Java_com_pnf_Chart_nativeToString(JNIEnv* env, jclass clazz, jlong ptr) {
     return env->NewStringUTF(str.c_str());
 }
 
-// ==============================================
-// Indicators Native Methods
-// ==============================================
+JNIEXPORT jstring JNICALL
+Java_com_pnf_Chart_nativeToAscii(JNIEnv* env, jclass clazz, jlong ptr) {
+    Chart* chart = reinterpret_cast<Chart*>(ptr);
+    std::string str = Visualization::to_ascii(*chart);
+    return env->NewStringUTF(str.c_str());
+}
+/// @}
+
+/// \name Indicators JNI methods
+/// \brief Lifecycle, configuration, and analytics calls backing
+/// `com.pnf.Indicators`.
+/// @{
 
 JNIEXPORT jlong JNICALL
 Java_com_pnf_Indicators_nativeCreate(JNIEnv* env, jclass clazz) {
@@ -930,4 +981,5 @@ Java_com_pnf_Indicators_nativeToString(JNIEnv* env, jclass clazz, jlong ptr) {
     return env->NewStringUTF(str.c_str());
 }
 
+/// @}
 } // extern "C"

@@ -1,23 +1,16 @@
-/// <summary>
-/// File: ChartTests.cs
-/// ChartTests binding types and helpers.
-/// </summary>
 using System;
 using Xunit;
 
 namespace PnF.Tests
 {
     /// <summary>
-    /// ChartTests binding type.
+    /// Unit tests for chart behavior.
     /// </summary>
     public class ChartTests
     {
         [Fact]
         /// <summary>
-        /// Version_ShouldReturnNonEmptyString API.
-        /// </summary>
-        /// <summary>
-        /// Version_ShouldReturnNonEmptyString API.
+        /// Version_ShouldReturnNonEmptyString.
         /// </summary>
         public void Version_ShouldReturnNonEmptyString()
         {
@@ -28,10 +21,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_CanCreateDefault API.
-        /// </summary>
-        /// <summary>
-        /// Chart_CanCreateDefault API.
+        /// Chart_CanCreateDefault.
         /// </summary>
         public void Chart_CanCreateDefault()
         {
@@ -41,10 +31,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_CanCreateWithConfig API.
-        /// </summary>
-        /// <summary>
-        /// Chart_CanCreateWithConfig API.
+        /// Chart_CanCreateWithConfig.
         /// </summary>
         public void Chart_CanCreateWithConfig()
         {
@@ -62,10 +49,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_CanAddPrice API.
-        /// </summary>
-        /// <summary>
-        /// Chart_CanAddPrice API.
+        /// Chart_CanAddPrice.
         /// </summary>
         public void Chart_CanAddPrice()
         {
@@ -81,10 +65,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_CanAddData API.
-        /// </summary>
-        /// <summary>
-        /// Chart_CanAddData API.
+        /// Chart_CanAddData.
         /// </summary>
         public void Chart_CanAddData()
         {
@@ -100,10 +81,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_CanAddOHLC API.
-        /// </summary>
-        /// <summary>
-        /// Chart_CanAddOHLC API.
+        /// Chart_CanAddOHLC.
         /// </summary>
         public void Chart_CanAddOHLC()
         {
@@ -125,10 +103,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_ColumnsSum API.
-        /// </summary>
-        /// <summary>
-        /// Chart_ColumnsSum API.
+        /// Chart_ColumnsSum.
         /// </summary>
         public void Chart_ColumnsSum()
         {
@@ -145,10 +120,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_BoxSizeIsPositive API.
-        /// </summary>
-        /// <summary>
-        /// Chart_BoxSizeIsPositive API.
+        /// Chart_BoxSizeIsPositive.
         /// </summary>
         public void Chart_BoxSizeIsPositive()
         {
@@ -163,10 +135,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_CanClear API.
-        /// </summary>
-        /// <summary>
-        /// Chart_CanClear API.
+        /// Chart_CanClear.
         /// </summary>
         public void Chart_CanClear()
         {
@@ -183,10 +152,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_CanGetColumnInfo API.
-        /// </summary>
-        /// <summary>
-        /// Chart_CanGetColumnInfo API.
+        /// Chart_CanGetColumnInfo.
         /// </summary>
         public void Chart_CanGetColumnInfo()
         {
@@ -212,10 +178,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_BiasDetection API.
-        /// </summary>
-        /// <summary>
-        /// Chart_BiasDetection API.
+        /// Chart_BiasDetection.
         /// </summary>
         public void Chart_BiasDetection()
         {
@@ -235,10 +198,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_ToStringWorks API.
-        /// </summary>
-        /// <summary>
-        /// Chart_ToStringWorks API.
+        /// Chart_ToStringWorks.
         /// </summary>
         public void Chart_ToStringWorks()
         {
@@ -254,10 +214,7 @@ namespace PnF.Tests
 
         [Fact]
         /// <summary>
-        /// Chart_DisposedThrows API.
-        /// </summary>
-        /// <summary>
-        /// Chart_DisposedThrows API.
+        /// Chart_DisposedThrows.
         /// </summary>
         public void Chart_DisposedThrows()
         {

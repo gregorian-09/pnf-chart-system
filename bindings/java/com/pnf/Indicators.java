@@ -1,14 +1,7 @@
-/**
- */
 package com.pnf;
 
 /**
- * Technical indicators for Point and Figure chart analysis.
- * Provides moving averages, Bollinger Bands, RSI, OBV, pattern recognition,
- * signal detection, support/resistance levels, price objectives, and congestion zones.
- */
-/**
- * Indicators binding type.
+ * Java binding for native indicator calculations on Point and Figure charts.
  */
 public class Indicators implements AutoCloseable {
     static {
@@ -19,10 +12,7 @@ public class Indicators implements AutoCloseable {
     private IndicatorConfig config;
 
     /**
-     */
-    /**
-     * s API.
-     * @return 
+     * Creates an indicator engine with default configuration.
      */
     public Indicators() {
         nativePtr = nativeCreate();
@@ -30,11 +20,9 @@ public class Indicators implements AutoCloseable {
     }
 
     /**
-     */
-    /**
-     * s API.
-     * @param config 
-     * @return 
+     * Creates an indicator engine with custom configuration.
+     *
+     * @param config indicator configuration
      */
     public Indicators(IndicatorConfig config) {
         nativePtr = nativeCreateWithConfig(
@@ -56,14 +44,9 @@ public class Indicators implements AutoCloseable {
     }
 
     /**
-     * Reconfigure indicators with new parameters.
-     * Changes take effect on the next calculate() call.
-     */
-    /**
-     */
-    /**
-     * configure API.
-     * @param config 
+     * Applies a new indicator configuration.
+     *
+     * @param config indicator configuration
      */
     public void configure(IndicatorConfig config) {
         nativeConfigure(nativePtr,
@@ -84,38 +67,30 @@ public class Indicators implements AutoCloseable {
         this.config = config;
     }
 
-    /** Returns the current indicator configuration */
     /**
-     * getConfig API.
-     * @return 
+     * Returns the current configuration.
+     *
+     * @return active indicator configuration
      */
     public IndicatorConfig getConfig() {
         return config;
     }
 
     /**
-     * Calculate all indicators based on the given chart.
-     */
-    /**
-     */
-    /**
-     * calculate API.
-     * @param chart 
+     * Runs indicator calculations for the supplied chart.
+     *
+     * @param chart chart to analyze
      */
     public void calculate(Chart chart) {
         nativeCalculate(nativePtr, chart.getNativePtr());
     }
 
     /**
-     * Set SMA periods conveniently.
-     */
-    /**
-     */
-    /**
-     * setSmaPeriods API.
-     * @param shortPeriod 
-     * @param mediumPeriod 
-     * @param longPeriod 
+     * Sets SMA periods and reapplies configuration.
+     *
+     * @param shortPeriod short SMA period
+     * @param mediumPeriod medium SMA period
+     * @param longPeriod long SMA period
      */
     public void setSmaPeriods(int shortPeriod, int mediumPeriod, int longPeriod) {
         config.smaShortPeriod = shortPeriod;
@@ -125,14 +100,10 @@ public class Indicators implements AutoCloseable {
     }
 
     /**
-     * Set Bollinger Band parameters conveniently.
-     */
-    /**
-     */
-    /**
-     * setBollingerParams API.
-     * @param period 
-     * @param stdDevs 
+     * Sets Bollinger settings and reapplies configuration.
+     *
+     * @param period Bollinger lookback period
+     * @param stdDevs standard-deviation multiplier
      */
     public void setBollingerParams(int period, double stdDevs) {
         config.bollingerPeriod = period;
@@ -141,15 +112,11 @@ public class Indicators implements AutoCloseable {
     }
 
     /**
-     * Set RSI parameters conveniently.
-     */
-    /**
-     */
-    /**
-     * setRsiParams API.
-     * @param period 
-     * @param overbought 
-     * @param oversold 
+     * Sets RSI settings and reapplies configuration.
+     *
+     * @param period RSI period
+     * @param overbought overbought threshold
+     * @param oversold oversold threshold
      */
     public void setRsiParams(int period, double overbought, double oversold) {
         config.rsiPeriod = period;
@@ -158,667 +125,637 @@ public class Indicators implements AutoCloseable {
         configure(config);
     }
 
-    /** Get count of support levels */
     /**
-     * supportLevelCount API.
-     * @return 
+     * Returns count of support levels.
+     *
+     * @return support-level count
      */
     public int supportLevelCount() {
         double[] prices = supportPrices();
         return prices != null ? prices.length : 0;
     }
 
-    /** Get count of resistance levels */
     /**
-     * resistanceLevelCount API.
-     * @return 
+     * Returns count of resistance levels.
+     *
+     * @return resistance-level count
      */
     public int resistanceLevelCount() {
         double[] prices = resistancePrices();
         return prices != null ? prices.length : 0;
     }
 
-    /** Get count of congestion zones */
     /**
-     * congestionZoneCount API.
-     * @return 
+     * Returns count of detected congestion zones.
+     *
+     * @return congestion-zone count
      */
     public int congestionZoneCount() {
         CongestionZone[] zones = congestionZones();
         return zones != null ? zones.length : 0;
     }
 
-    // ========== Moving Averages ==========
-
-    /** Get short-term SMA value for a specific column */
     /**
-     * smaShort API.
-     * @param column 
-     * @return 
+     * Returns short SMA at a column.
+     *
+     * @param column zero-based column index
+     * @return short SMA value
      */
     public double smaShort(int column) {
         return nativeSmaShort(nativePtr, column);
     }
 
-    /** Get medium-term SMA value for a specific column */
     /**
-     * smaMedium API.
-     * @param column 
-     * @return 
+     * Returns medium SMA at a column.
+     *
+     * @param column zero-based column index
+     * @return medium SMA value
      */
     public double smaMedium(int column) {
         return nativeSmaMiddle(nativePtr, column);
     }
 
-    /** Get long-term SMA value for a specific column */
     /**
-     * smaLong API.
-     * @param column 
-     * @return 
+     * Returns long SMA at a column.
+     *
+     * @param column zero-based column index
+     * @return long SMA value
      */
     public double smaLong(int column) {
         return nativeSmaLong(nativePtr, column);
     }
 
-    /** @deprecated Use smaShort() instead */
+    /**
+     * Legacy alias for {@link #smaShort(int)}.
+     *
+     * @param column zero-based column index
+     * @return short SMA value
+     * @deprecated use {@link #smaShort(int)}
+     */
     @Deprecated
-    /**
-     */
-    /**
-     * sma5 API.
-     * @param column 
-     * @return 
-     */
     public double sma5(int column) {
         return smaShort(column);
     }
 
-    /** @deprecated Use smaMedium() instead */
+    /**
+     * Legacy alias for {@link #smaMedium(int)}.
+     *
+     * @param column zero-based column index
+     * @return medium SMA value
+     * @deprecated use {@link #smaMedium(int)}
+     */
     @Deprecated
-    /**
-     */
-    /**
-     * sma10 API.
-     * @param column 
-     * @return 
-     */
     public double sma10(int column) {
         return smaMedium(column);
     }
 
-    /** @deprecated Use smaLong() instead */
+    /**
+     * Legacy alias for {@link #smaLong(int)}.
+     *
+     * @param column zero-based column index
+     * @return long SMA value
+     * @deprecated use {@link #smaLong(int)}
+     */
     @Deprecated
-    /**
-     */
-    /**
-     * sma20 API.
-     * @param column 
-     * @return 
-     */
     public double sma20(int column) {
         return smaLong(column);
     }
 
-    /** Get all short-term SMA values as an array */
     /**
-     * smaShortValues API.
-     * @return 
+     * Returns all short SMA values.
+     *
+     * @return array of short SMA values
      */
     public double[] smaShortValues() {
         return nativeSmaShortValues(nativePtr);
     }
 
-    /** Get all medium-term SMA values as an array */
     /**
-     * smaMediumValues API.
-     * @return 
+     * Returns all medium SMA values.
+     *
+     * @return array of medium SMA values
      */
     public double[] smaMediumValues() {
         return nativeSmaMediumValues(nativePtr);
     }
 
-    /** Get all long-term SMA values as an array */
     /**
-     * smaLongValues API.
-     * @return 
+     * Returns all long SMA values.
+     *
+     * @return array of long SMA values
      */
     public double[] smaLongValues() {
         return nativeSmaLongValues(nativePtr);
     }
 
-    // ========== Bollinger Bands ==========
-
-    /** Get Bollinger Band middle band value for a specific column */
     /**
-     * bollingerMiddle API.
-     * @param column 
-     * @return 
+     * Returns Bollinger middle band at a column.
+     *
+     * @param column zero-based column index
+     * @return middle-band value
      */
     public double bollingerMiddle(int column) {
         return nativeBollingerMiddle(nativePtr, column);
     }
 
-    /** Get Bollinger Band upper band value for a specific column */
     /**
-     * bollingerUpper API.
-     * @param column 
-     * @return 
+     * Returns Bollinger upper band at a column.
+     *
+     * @param column zero-based column index
+     * @return upper-band value
      */
     public double bollingerUpper(int column) {
         return nativeBollingerUpper(nativePtr, column);
     }
 
-    /** Get Bollinger Band lower band value for a specific column */
     /**
-     * bollingerLower API.
-     * @param column 
-     * @return 
+     * Returns Bollinger lower band at a column.
+     *
+     * @param column zero-based column index
+     * @return lower-band value
      */
     public double bollingerLower(int column) {
         return nativeBollingerLower(nativePtr, column);
     }
 
-    /** Check if column has valid Bollinger Band values */
     /**
-     * hasBollingerValue API.
-     * @param column 
-     * @return 
+     * Indicates whether Bollinger values are valid at a column.
+     *
+     * @param column zero-based column index
+     * @return {@code true} if values exist
      */
     public boolean hasBollingerValue(int column) {
         return nativeHasBollingerValue(nativePtr, column);
     }
 
-    /** Check if price is above upper Bollinger Band */
     /**
-     * isAboveUpperBand API.
-     * @param column 
-     * @param price 
-     * @return 
+     * Checks whether price is above the upper Bollinger band.
+     *
+     * @param column zero-based column index
+     * @param price price to test
+     * @return {@code true} if price is above upper band
      */
     public boolean isAboveUpperBand(int column, double price) {
         return nativeIsAboveUpperBand(nativePtr, column, price);
     }
 
-    /** Check if price is below lower Bollinger Band */
     /**
-     * isBelowLowerBand API.
-     * @param column 
-     * @param price 
-     * @return 
+     * Checks whether price is below the lower Bollinger band.
+     *
+     * @param column zero-based column index
+     * @param price price to test
+     * @return {@code true} if price is below lower band
      */
     public boolean isBelowLowerBand(int column, double price) {
         return nativeIsBelowLowerBand(nativePtr, column, price);
     }
 
-    /** Get all Bollinger middle band values as an array */
     /**
-     * bollingerMiddleValues API.
-     * @return 
+     * Returns all Bollinger middle-band values.
+     *
+     * @return middle-band value array
      */
     public double[] bollingerMiddleValues() {
         return nativeBollingerMiddleValues(nativePtr);
     }
 
-    /** Get all Bollinger upper band values as an array */
     /**
-     * bollingerUpperValues API.
-     * @return 
+     * Returns all Bollinger upper-band values.
+     *
+     * @return upper-band value array
      */
     public double[] bollingerUpperValues() {
         return nativeBollingerUpperValues(nativePtr);
     }
 
-    /** Get all Bollinger lower band values as an array */
     /**
-     * bollingerLowerValues API.
-     * @return 
+     * Returns all Bollinger lower-band values.
+     *
+     * @return lower-band value array
      */
     public double[] bollingerLowerValues() {
         return nativeBollingerLowerValues(nativePtr);
     }
 
-    // ========== RSI ==========
-
-    /** Get RSI value for a specific column */
     /**
-     * rsi API.
-     * @param column 
-     * @return 
+     * Returns RSI value at a column.
+     *
+     * @param column zero-based column index
+     * @return RSI value
      */
     public double rsi(int column) {
         return nativeRsi(nativePtr, column);
     }
 
-    /** Check if column has valid RSI value */
     /**
-     * hasRsiValue API.
-     * @param column 
-     * @return 
+     * Indicates whether RSI value is available at a column.
+     *
+     * @param column zero-based column index
+     * @return {@code true} if RSI exists
      */
     public boolean hasRsiValue(int column) {
         return nativeHasRsiValue(nativePtr, column);
     }
 
-    /** Check if RSI indicates overbought condition */
     /**
-     * isOverbought API.
-     * @param column 
-     * @return 
+     * Indicates whether RSI is above overbought threshold.
+     *
+     * @param column zero-based column index
+     * @return {@code true} if overbought
      */
     public boolean isOverbought(int column) {
         return nativeIsOverbought(nativePtr, column);
     }
 
-    /** Check if RSI indicates oversold condition */
     /**
-     * isOversold API.
-     * @param column 
-     * @return 
+     * Indicates whether RSI is below oversold threshold.
+     *
+     * @param column zero-based column index
+     * @return {@code true} if oversold
      */
     public boolean isOversold(int column) {
         return nativeIsOversold(nativePtr, column);
     }
 
-    /** Get all RSI values as an array */
     /**
-     * rsiValues API.
-     * @return 
+     * Returns all RSI values.
+     *
+     * @return RSI value array
      */
     public double[] rsiValues() {
         return nativeRsiValues(nativePtr);
     }
 
-    // ========== On-Balance Volume ==========
-
-    /** Get OBV value for a specific column */
     /**
-     * obv API.
-     * @param column 
-     * @return 
+     * Returns OBV value at a column.
+     *
+     * @param column zero-based column index
+     * @return OBV value
      */
     public double obv(int column) {
         return nativeObv(nativePtr, column);
     }
 
-    /** Get all OBV values as an array */
     /**
-     * obvValues API.
-     * @return 
+     * Returns all OBV values.
+     *
+     * @return OBV value array
      */
     public double[] obvValues() {
         return nativeObvValues(nativePtr);
     }
 
-    // ========== Bullish Percent ==========
-
-    /** Get current bullish percent value */
     /**
-     * bullishPercent API.
-     * @return 
+     * Returns current bullish-percent value.
+     *
+     * @return bullish percent
      */
     public double bullishPercent() {
         return nativeBullishPercent(nativePtr);
     }
 
-    /** Check if bullish percent indicates bullish alert */
     /**
-     * isBullishAlert API.
-     * @return 
+     * Indicates bullish-alert condition.
+     *
+     * @return {@code true} if bullish alert is active
      */
     public boolean isBullishAlert() {
         return nativeIsBullishAlert(nativePtr);
     }
 
-    /** Check if bullish percent indicates bearish alert */
     /**
-     * isBearishAlert API.
-     * @return 
+     * Indicates bearish-alert condition.
+     *
+     * @return {@code true} if bearish alert is active
      */
     public boolean isBearishAlert() {
         return nativeIsBearishAlert(nativePtr);
     }
 
-    // ========== Signals ==========
-
-    /** Get the current (most recent) signal type */
     /**
-     * currentSignal API.
-     * @return 
+     * Returns the current signal type.
+     *
+     * @return most recent signal
      */
     public SignalType currentSignal() {
         return SignalType.values()[nativeCurrentSignal(nativePtr)];
     }
 
-    /** Check if current signal is a buy signal */
     /**
-     * hasBuySignal API.
-     * @return 
+     * Indicates whether current signal is buy.
+     *
+     * @return {@code true} if buy signal exists
      */
     public boolean hasBuySignal() {
         return nativeHasBuySignal(nativePtr);
     }
 
-    /** Check if current signal is a sell signal */
     /**
-     * hasSellSignal API.
-     * @return 
+     * Indicates whether current signal is sell.
+     *
+     * @return {@code true} if sell signal exists
      */
     public boolean hasSellSignal() {
         return nativeHasSellSignal(nativePtr);
     }
 
-    /** Get count of all detected signals */
     /**
-     * signalCount API.
-     * @return 
+     * Returns number of detected signals.
+     *
+     * @return signal count
      */
     public int signalCount() {
         return nativeSignalCount(nativePtr);
     }
 
-    /** Get count of buy signals */
     /**
-     * buySignalCount API.
-     * @return 
+     * Returns number of buy signals.
+     *
+     * @return buy-signal count
      */
     public int buySignalCount() {
         return nativeBuySignalCount(nativePtr);
     }
 
-    /** Get count of sell signals */
     /**
-     * sellSignalCount API.
-     * @return 
+     * Returns number of sell signals.
+     *
+     * @return sell-signal count
      */
     public int sellSignalCount() {
         return nativeSellSignalCount(nativePtr);
     }
 
-    /** Get all detected signals */
     /**
-     * signals API.
-     * @return 
+     * Returns all signals.
+     *
+     * @return signal array
      */
     public Signal[] signals() {
         return nativeGetSignals(nativePtr);
     }
 
-    /** Get all buy signals */
     /**
-     * buySignals API.
-     * @return 
+     * Returns all buy signals.
+     *
+     * @return buy-signal array
      */
     public Signal[] buySignals() {
         return nativeGetBuySignals(nativePtr);
     }
 
-    /** Get all sell signals */
     /**
-     * sellSignals API.
-     * @return 
+     * Returns all sell signals.
+     *
+     * @return sell-signal array
      */
     public Signal[] sellSignals() {
         return nativeGetSellSignals(nativePtr);
     }
 
-    // ========== Patterns ==========
-
-    /** Get total count of detected patterns */
     /**
-     * patternCount API.
-     * @return 
+     * Returns total pattern count.
+     *
+     * @return pattern count
      */
     public int patternCount() {
         return nativePatternCount(nativePtr);
     }
 
-    /** Get count of bullish patterns */
     /**
-     * bullishPatternCount API.
-     * @return 
+     * Returns bullish pattern count.
+     *
+     * @return bullish-pattern count
      */
     public int bullishPatternCount() {
         return nativeBullishPatternCount(nativePtr);
     }
 
-    /** Get count of bearish patterns */
     /**
-     * bearishPatternCount API.
-     * @return 
+     * Returns bearish pattern count.
+     *
+     * @return bearish-pattern count
      */
     public int bearishPatternCount() {
         return nativeBearishPatternCount(nativePtr);
     }
 
-    /** Check if a specific pattern type was detected */
     /**
-     * hasPattern API.
-     * @param type 
-     * @return 
+     * Checks whether a pattern type is present.
+     *
+     * @param type pattern type
+     * @return {@code true} if pattern exists
      */
     public boolean hasPattern(PatternType type) {
         return nativeHasPattern(nativePtr, type.ordinal());
     }
 
-    /** Get all detected patterns */
     /**
-     * patterns API.
-     * @return 
+     * Returns all detected patterns.
+     *
+     * @return pattern array
      */
     public Pattern[] patterns() {
         return nativeGetPatterns(nativePtr);
     }
 
-    /** Get all bullish patterns */
     /**
-     * bullishPatterns API.
-     * @return 
+     * Returns bullish patterns.
+     *
+     * @return bullish-pattern array
      */
     public Pattern[] bullishPatterns() {
         return nativeGetBullishPatterns(nativePtr);
     }
 
-    /** Get all bearish patterns */
     /**
-     * bearishPatterns API.
-     * @return 
+     * Returns bearish patterns.
+     *
+     * @return bearish-pattern array
      */
     public Pattern[] bearishPatterns() {
         return nativeGetBearishPatterns(nativePtr);
     }
 
-    // ========== Support/Resistance ==========
-
-    /** Get all support/resistance levels */
     /**
-     * levels API.
-     * @return 
+     * Returns all support/resistance levels.
+     *
+     * @return level array
      */
     public SupportResistanceLevel[] levels() {
         return nativeGetLevels(nativePtr);
     }
 
-    /** Get support levels only */
     /**
-     * supportLevels API.
-     * @return 
+     * Returns support levels.
+     *
+     * @return support-level array
      */
     public SupportResistanceLevel[] supportLevels() {
         return nativeGetSupportLevels(nativePtr);
     }
 
-    /** Get resistance levels only */
     /**
-     * resistanceLevels API.
-     * @return 
+     * Returns resistance levels.
+     *
+     * @return resistance-level array
      */
     public SupportResistanceLevel[] resistanceLevels() {
         return nativeGetResistanceLevels(nativePtr);
     }
 
-    /** Get significant levels with minimum touch count */
     /**
-     * significantLevels API.
-     * @param minTouches 
-     * @return 
+     * Returns levels with at least a minimum touch count.
+     *
+     * @param minTouches minimum touch count
+     * @return filtered level array
      */
     public SupportResistanceLevel[] significantLevels(int minTouches) {
         return nativeGetSignificantLevels(nativePtr, minTouches);
     }
 
-    /** Check if price is near a support level */
     /**
-     * isNearSupport API.
-     * @param price 
-     * @param tolerance 
-     * @return 
+     * Checks whether a price is near support.
+     *
+     * @param price price to test
+     * @param tolerance proximity tolerance
+     * @return {@code true} if near support
      */
     public boolean isNearSupport(double price, double tolerance) {
         return nativeIsNearSupport(nativePtr, price, tolerance);
     }
 
-    /** Check if price is near a resistance level */
     /**
-     * isNearResistance API.
-     * @param price 
-     * @param tolerance 
-     * @return 
+     * Checks whether a price is near resistance.
+     *
+     * @param price price to test
+     * @param tolerance proximity tolerance
+     * @return {@code true} if near resistance
      */
     public boolean isNearResistance(double price, double tolerance) {
         return nativeIsNearResistance(nativePtr, price, tolerance);
     }
 
-    /** Get support level prices as array */
     /**
-     * supportPrices API.
-     * @return 
+     * Returns support prices.
+     *
+     * @return support-price array
      */
     public double[] supportPrices() {
         return nativeGetSupportPrices(nativePtr);
     }
 
-    /** Get resistance level prices as array */
     /**
-     * resistancePrices API.
-     * @return 
+     * Returns resistance prices.
+     *
+     * @return resistance-price array
      */
     public double[] resistancePrices() {
         return nativeGetResistancePrices(nativePtr);
     }
 
-    // ========== Price Objectives ==========
-
-    /** Get all price objectives */
     /**
-     * priceObjectives API.
-     * @return 
+     * Returns all price objectives.
+     *
+     * @return price-objective array
      */
     public PriceObjective[] priceObjectives() {
         return nativeGetPriceObjectives(nativePtr);
     }
 
-    /** Get bullish price objectives */
     /**
-     * bullishObjectives API.
-     * @return 
+     * Returns bullish price objectives.
+     *
+     * @return bullish-objective array
      */
     public PriceObjective[] bullishObjectives() {
         return nativeGetBullishObjectives(nativePtr);
     }
 
-    /** Get bearish price objectives */
     /**
-     * bearishObjectives API.
-     * @return 
+     * Returns bearish price objectives.
+     *
+     * @return bearish-objective array
      */
     public PriceObjective[] bearishObjectives() {
         return nativeGetBearishObjectives(nativePtr);
     }
 
-    /** Get bullish target prices as array */
     /**
-     * bullishTargets API.
-     * @return 
+     * Returns bullish target prices.
+     *
+     * @return bullish-target array
      */
     public double[] bullishTargets() {
         return nativeGetBullishTargets(nativePtr);
     }
 
-    /** Get bearish target prices as array */
     /**
-     * bearishTargets API.
-     * @return 
+     * Returns bearish target prices.
+     *
+     * @return bearish-target array
      */
     public double[] bearishTargets() {
         return nativeGetBearishTargets(nativePtr);
     }
 
-    // ========== Congestion Zones ==========
-
-    /** Get all detected congestion zones */
     /**
-     * congestionZones API.
-     * @return 
+     * Returns detected congestion zones.
+     *
+     * @return congestion-zone array
      */
     public CongestionZone[] congestionZones() {
         return nativeGetCongestionZones(nativePtr);
     }
 
-    /** Check if a column is within a congestion zone */
     /**
-     * isInCongestion API.
-     * @param column 
-     * @return 
+     * Checks whether a column lies in any congestion zone.
+     *
+     * @param column zero-based column index
+     * @return {@code true} if column is in congestion
      */
     public boolean isInCongestion(int column) {
         return nativeIsInCongestion(nativePtr, column);
     }
 
-    /** Get the largest congestion zone */
     /**
-     * largestCongestionZone API.
-     * @return 
+     * Returns the largest congestion zone.
+     *
+     * @return largest congestion zone, or implementation-defined empty value
      */
     public CongestionZone largestCongestionZone() {
         return nativeGetLargestCongestionZone(nativePtr);
     }
 
-    // ========== Summary/Output ==========
-
-    /** Get text summary of all indicators */
     /**
-     * summary API.
-     * @return 
+     * Returns a text summary of computed indicators.
+     *
+     * @return summary text
      */
     public String summary() {
         return nativeSummary(nativePtr);
     }
 
+    /**
+     * Returns a native-generated text representation.
+     *
+     * @return indicator text
+     */
     @Override
-    /**
-     */
-    /**
-     * toString API.
-     * @return 
-     */
     public String toString() {
         return nativeToString(nativePtr);
     }
 
+    /**
+     * Releases native resources.
+     */
     @Override
-    /**
-     */
-    /**
-     * close API.
-     */
     public void close() {
         if (nativePtr != 0) {
             nativeDestroy(nativePtr);
             nativePtr = 0;
         }
     }
-
-    // ========== Native Methods ==========
 
     private static native long nativeCreate();
     private static native long nativeCreateWithConfig(
@@ -838,7 +775,6 @@ public class Indicators implements AutoCloseable {
     );
     private static native void nativeCalculate(long ptr, long chartPtr);
 
-    // Moving averages
     private static native double nativeSmaShort(long ptr, int column);
     private static native double nativeSmaMiddle(long ptr, int column);
     private static native double nativeSmaLong(long ptr, int column);
@@ -846,7 +782,6 @@ public class Indicators implements AutoCloseable {
     private static native double[] nativeSmaMediumValues(long ptr);
     private static native double[] nativeSmaLongValues(long ptr);
 
-    // Bollinger Bands
     private static native double nativeBollingerMiddle(long ptr, int column);
     private static native double nativeBollingerUpper(long ptr, int column);
     private static native double nativeBollingerLower(long ptr, int column);
@@ -857,23 +792,19 @@ public class Indicators implements AutoCloseable {
     private static native double[] nativeBollingerUpperValues(long ptr);
     private static native double[] nativeBollingerLowerValues(long ptr);
 
-    // RSI
     private static native double nativeRsi(long ptr, int column);
     private static native boolean nativeHasRsiValue(long ptr, int column);
     private static native boolean nativeIsOverbought(long ptr, int column);
     private static native boolean nativeIsOversold(long ptr, int column);
     private static native double[] nativeRsiValues(long ptr);
 
-    // OBV
     private static native double nativeObv(long ptr, int column);
     private static native double[] nativeObvValues(long ptr);
 
-    // Bullish Percent
     private static native double nativeBullishPercent(long ptr);
     private static native boolean nativeIsBullishAlert(long ptr);
     private static native boolean nativeIsBearishAlert(long ptr);
 
-    // Signals
     private static native int nativeCurrentSignal(long ptr);
     private static native boolean nativeHasBuySignal(long ptr);
     private static native boolean nativeHasSellSignal(long ptr);
@@ -884,7 +815,6 @@ public class Indicators implements AutoCloseable {
     private static native Signal[] nativeGetBuySignals(long ptr);
     private static native Signal[] nativeGetSellSignals(long ptr);
 
-    // Patterns
     private static native int nativePatternCount(long ptr);
     private static native int nativeBullishPatternCount(long ptr);
     private static native int nativeBearishPatternCount(long ptr);
@@ -893,7 +823,6 @@ public class Indicators implements AutoCloseable {
     private static native Pattern[] nativeGetBullishPatterns(long ptr);
     private static native Pattern[] nativeGetBearishPatterns(long ptr);
 
-    // Support/Resistance
     private static native SupportResistanceLevel[] nativeGetLevels(long ptr);
     private static native SupportResistanceLevel[] nativeGetSupportLevels(long ptr);
     private static native SupportResistanceLevel[] nativeGetResistanceLevels(long ptr);
@@ -903,19 +832,16 @@ public class Indicators implements AutoCloseable {
     private static native double[] nativeGetSupportPrices(long ptr);
     private static native double[] nativeGetResistancePrices(long ptr);
 
-    // Price Objectives
     private static native PriceObjective[] nativeGetPriceObjectives(long ptr);
     private static native PriceObjective[] nativeGetBullishObjectives(long ptr);
     private static native PriceObjective[] nativeGetBearishObjectives(long ptr);
     private static native double[] nativeGetBullishTargets(long ptr);
     private static native double[] nativeGetBearishTargets(long ptr);
 
-    // Congestion Zones
     private static native CongestionZone[] nativeGetCongestionZones(long ptr);
     private static native boolean nativeIsInCongestion(long ptr, int column);
     private static native CongestionZone nativeGetLargestCongestionZone(long ptr);
 
-    // Summary
     private static native String nativeSummary(long ptr);
     private static native String nativeToString(long ptr);
 }

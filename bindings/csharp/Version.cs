@@ -1,14 +1,10 @@
-/// <summary>
-/// File: Version.cs
-/// Version binding types and helpers.
-/// </summary>
 using System;
 using System.Runtime.InteropServices;
 
 namespace PnF
 {
     /// <summary>
-    /// Version binding type.
+    /// Version helpers for the native library.
     /// </summary>
     public static class Version
     {

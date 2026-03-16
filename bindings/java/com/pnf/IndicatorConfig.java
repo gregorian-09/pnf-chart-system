@@ -1,71 +1,59 @@
-/**
- */
 package com.pnf;
 
 /**
- * Configuration parameters for technical indicators.
- * Allows customization of moving average periods, Bollinger Band parameters,
- * RSI thresholds, and other indicator settings.
- */
-/**
- * IndicatorConfig binding type.
+ * Configuration parameters for {@link Indicators} calculations.
  */
 public class IndicatorConfig {
-    /** Period for short-term simple moving average (default: 5) */
+    /** Period for short-term simple moving average (default: 5). */
     public int smaShortPeriod = 5;
 
-    /** Period for medium-term simple moving average (default: 10) */
+    /** Period for medium-term simple moving average (default: 10). */
     public int smaMediumPeriod = 10;
 
-    /** Period for long-term simple moving average (default: 20) */
+    /** Period for long-term simple moving average (default: 20). */
     public int smaLongPeriod = 20;
 
-    /** Period for Bollinger Bands calculation (default: 20) */
+    /** Period for Bollinger Bands calculation (default: 20). */
     public int bollingerPeriod = 20;
 
-    /** Number of standard deviations for Bollinger Bands (default: 2.0) */
+    /** Number of standard deviations for Bollinger Bands (default: 2.0). */
     public double bollingerStdDevs = 2.0;
 
-    /** Period for RSI calculation (default: 14) */
+    /** Period for RSI calculation (default: 14). */
     public int rsiPeriod = 14;
 
-    /** RSI level indicating overbought condition (default: 70.0) */
+    /** RSI level indicating overbought condition (default: 70.0). */
     public double rsiOverbought = 70.0;
 
-    /** RSI level indicating oversold condition (default: 30.0) */
+    /** RSI level indicating oversold condition (default: 30.0). */
     public double rsiOversold = 30.0;
 
-    /** Bullish percent threshold for bullish alert (default: 70.0) */
+    /** Bullish percent threshold for bullish alert (default: 70.0). */
     public double bullishAlertThreshold = 70.0;
 
-    /** Bullish percent threshold for bearish alert (default: 30.0) */
+    /** Bullish percent threshold for bearish alert (default: 30.0). */
     public double bearishAlertThreshold = 30.0;
 
-    /** Threshold for merging similar support/resistance levels (default: 0.01) */
+    /** Threshold for merging similar support/resistance levels (default: 0.01). */
     public double supportResistanceThreshold = 0.01;
 
-    /** Minimum columns required to identify congestion zone (default: 4) */
+    /** Minimum columns required to identify congestion zone (default: 4). */
     public int congestionMinColumns = 4;
 
-    /** Price range percentage for congestion detection (default: 0.05) */
+    /** Price range percentage for congestion detection (default: 0.05). */
     public double congestionPriceRange = 0.05;
 
     /**
-     */
-    /**
-     * g API.
-     * @return 
+     * Creates default indicator configuration.
      */
     public IndicatorConfig() {}
 
     /**
-     */
-    /**
-     * g API.
-     * @param smaShortPeriod 
-     * @param smaMediumPeriod 
-     * @param smaLongPeriod 
-     * @return 
+     * Creates a configuration with custom SMA periods.
+     *
+     * @param smaShortPeriod short SMA period
+     * @param smaMediumPeriod medium SMA period
+     * @param smaLongPeriod long SMA period
      */
     public IndicatorConfig(int smaShortPeriod, int smaMediumPeriod, int smaLongPeriod) {
         this.smaShortPeriod = smaShortPeriod;
@@ -73,30 +61,49 @@ public class IndicatorConfig {
         this.smaLongPeriod = smaLongPeriod;
     }
 
-    /** Creates a default configuration with standard parameters */
+    /**
+     * Creates a default configuration.
+     *
+     * @return default indicator configuration
+     */
     public static IndicatorConfig defaults() {
         return new IndicatorConfig();
     }
 
-    /** Creates a default configuration with standard parameters */
+    /**
+     * Creates a default configuration.
+     *
+     * @return default indicator configuration
+     */
     public static IndicatorConfig getDefault() {
         return new IndicatorConfig();
     }
 
-    /** Returns a builder for fluent configuration */
+    /**
+     * Returns a builder for fluent configuration.
+     *
+     * @return new builder instance
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Fluent builder for {@link IndicatorConfig}.
+     */
     public static class Builder {
         private final IndicatorConfig config = new IndicatorConfig();
 
         /**
+         * Creates a builder with default indicator settings.
          */
+        public Builder() {}
+
         /**
-         * smaShortPeriod API.
-         * @param period 
-         * @return 
+         * Sets short SMA period.
+         *
+         * @param period short SMA period
+         * @return this builder
          */
         public Builder smaShortPeriod(int period) {
             config.smaShortPeriod = period;
@@ -104,11 +111,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * smaMediumPeriod API.
-         * @param period 
-         * @return 
+         * Sets medium SMA period.
+         *
+         * @param period medium SMA period
+         * @return this builder
          */
         public Builder smaMediumPeriod(int period) {
             config.smaMediumPeriod = period;
@@ -116,11 +122,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * smaLongPeriod API.
-         * @param period 
-         * @return 
+         * Sets long SMA period.
+         *
+         * @param period long SMA period
+         * @return this builder
          */
         public Builder smaLongPeriod(int period) {
             config.smaLongPeriod = period;
@@ -128,11 +133,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * bollingerPeriod API.
-         * @param period 
-         * @return 
+         * Sets Bollinger period.
+         *
+         * @param period Bollinger lookback period
+         * @return this builder
          */
         public Builder bollingerPeriod(int period) {
             config.bollingerPeriod = period;
@@ -140,11 +144,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * bollingerStdDevs API.
-         * @param stdDevs 
-         * @return 
+         * Sets Bollinger standard-deviation multiplier.
+         *
+         * @param stdDevs standard-deviation multiplier
+         * @return this builder
          */
         public Builder bollingerStdDevs(double stdDevs) {
             config.bollingerStdDevs = stdDevs;
@@ -152,11 +155,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * rsiPeriod API.
-         * @param period 
-         * @return 
+         * Sets RSI period.
+         *
+         * @param period RSI period
+         * @return this builder
          */
         public Builder rsiPeriod(int period) {
             config.rsiPeriod = period;
@@ -164,11 +166,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * rsiOverbought API.
-         * @param threshold 
-         * @return 
+         * Sets RSI overbought threshold.
+         *
+         * @param threshold overbought threshold
+         * @return this builder
          */
         public Builder rsiOverbought(double threshold) {
             config.rsiOverbought = threshold;
@@ -176,11 +177,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * rsiOversold API.
-         * @param threshold 
-         * @return 
+         * Sets RSI oversold threshold.
+         *
+         * @param threshold oversold threshold
+         * @return this builder
          */
         public Builder rsiOversold(double threshold) {
             config.rsiOversold = threshold;
@@ -188,11 +188,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * bullishAlertThreshold API.
-         * @param threshold 
-         * @return 
+         * Sets bullish alert threshold.
+         *
+         * @param threshold bullish alert threshold
+         * @return this builder
          */
         public Builder bullishAlertThreshold(double threshold) {
             config.bullishAlertThreshold = threshold;
@@ -200,11 +199,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * bearishAlertThreshold API.
-         * @param threshold 
-         * @return 
+         * Sets bearish alert threshold.
+         *
+         * @param threshold bearish alert threshold
+         * @return this builder
          */
         public Builder bearishAlertThreshold(double threshold) {
             config.bearishAlertThreshold = threshold;
@@ -212,11 +210,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * supportResistanceThreshold API.
-         * @param threshold 
-         * @return 
+         * Sets support/resistance merge threshold.
+         *
+         * @param threshold merge threshold
+         * @return this builder
          */
         public Builder supportResistanceThreshold(double threshold) {
             config.supportResistanceThreshold = threshold;
@@ -224,11 +221,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * congestionMinColumns API.
-         * @param columns 
-         * @return 
+         * Sets minimum congestion columns.
+         *
+         * @param columns minimum congestion columns
+         * @return this builder
          */
         public Builder congestionMinColumns(int columns) {
             config.congestionMinColumns = columns;
@@ -236,11 +232,10 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * congestionPriceRange API.
-         * @param range 
-         * @return 
+         * Sets congestion range threshold.
+         *
+         * @param range congestion range threshold
+         * @return this builder
          */
         public Builder congestionPriceRange(double range) {
             config.congestionPriceRange = range;
@@ -248,21 +243,20 @@ public class IndicatorConfig {
         }
 
         /**
-         */
-        /**
-         * build API.
-         * @return 
+         * Builds the configured object.
+         *
+         * @return configured indicator config
          */
         public IndicatorConfig build() {
             return config;
         }
     }
 
-    /** Builder pattern for fluent configuration */
     /**
-     * withSmaShortPeriod API.
-     * @param period 
-     * @return 
+     * Sets short SMA period.
+     *
+     * @param period short SMA period
+     * @return this config
      */
     public IndicatorConfig withSmaShortPeriod(int period) {
         this.smaShortPeriod = period;
@@ -270,11 +264,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withSmaMediumPeriod API.
-     * @param period 
-     * @return 
+     * Sets medium SMA period.
+     *
+     * @param period medium SMA period
+     * @return this config
      */
     public IndicatorConfig withSmaMediumPeriod(int period) {
         this.smaMediumPeriod = period;
@@ -282,11 +275,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withSmaLongPeriod API.
-     * @param period 
-     * @return 
+     * Sets long SMA period.
+     *
+     * @param period long SMA period
+     * @return this config
      */
     public IndicatorConfig withSmaLongPeriod(int period) {
         this.smaLongPeriod = period;
@@ -294,11 +286,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withBollingerPeriod API.
-     * @param period 
-     * @return 
+     * Sets Bollinger period.
+     *
+     * @param period Bollinger lookback period
+     * @return this config
      */
     public IndicatorConfig withBollingerPeriod(int period) {
         this.bollingerPeriod = period;
@@ -306,11 +297,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withBollingerStdDevs API.
-     * @param stdDevs 
-     * @return 
+     * Sets Bollinger standard-deviation multiplier.
+     *
+     * @param stdDevs standard-deviation multiplier
+     * @return this config
      */
     public IndicatorConfig withBollingerStdDevs(double stdDevs) {
         this.bollingerStdDevs = stdDevs;
@@ -318,11 +308,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withRsiPeriod API.
-     * @param period 
-     * @return 
+     * Sets RSI period.
+     *
+     * @param period RSI period
+     * @return this config
      */
     public IndicatorConfig withRsiPeriod(int period) {
         this.rsiPeriod = period;
@@ -330,11 +319,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withRsiOverbought API.
-     * @param threshold 
-     * @return 
+     * Sets RSI overbought threshold.
+     *
+     * @param threshold overbought threshold
+     * @return this config
      */
     public IndicatorConfig withRsiOverbought(double threshold) {
         this.rsiOverbought = threshold;
@@ -342,11 +330,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withRsiOversold API.
-     * @param threshold 
-     * @return 
+     * Sets RSI oversold threshold.
+     *
+     * @param threshold oversold threshold
+     * @return this config
      */
     public IndicatorConfig withRsiOversold(double threshold) {
         this.rsiOversold = threshold;
@@ -354,11 +341,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withBullishAlertThreshold API.
-     * @param threshold 
-     * @return 
+     * Sets bullish alert threshold.
+     *
+     * @param threshold bullish alert threshold
+     * @return this config
      */
     public IndicatorConfig withBullishAlertThreshold(double threshold) {
         this.bullishAlertThreshold = threshold;
@@ -366,11 +352,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withBearishAlertThreshold API.
-     * @param threshold 
-     * @return 
+     * Sets bearish alert threshold.
+     *
+     * @param threshold bearish alert threshold
+     * @return this config
      */
     public IndicatorConfig withBearishAlertThreshold(double threshold) {
         this.bearishAlertThreshold = threshold;
@@ -378,11 +363,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withSupportResistanceThreshold API.
-     * @param threshold 
-     * @return 
+     * Sets support/resistance merge threshold.
+     *
+     * @param threshold merge threshold
+     * @return this config
      */
     public IndicatorConfig withSupportResistanceThreshold(double threshold) {
         this.supportResistanceThreshold = threshold;
@@ -390,11 +374,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withCongestionMinColumns API.
-     * @param columns 
-     * @return 
+     * Sets minimum congestion columns.
+     *
+     * @param columns minimum congestion columns
+     * @return this config
      */
     public IndicatorConfig withCongestionMinColumns(int columns) {
         this.congestionMinColumns = columns;
@@ -402,11 +385,10 @@ public class IndicatorConfig {
     }
 
     /**
-     */
-    /**
-     * withCongestionPriceRange API.
-     * @param range 
-     * @return 
+     * Sets congestion range threshold.
+     *
+     * @param range congestion range threshold
+     * @return this config
      */
     public IndicatorConfig withCongestionPriceRange(double range) {
         this.congestionPriceRange = range;

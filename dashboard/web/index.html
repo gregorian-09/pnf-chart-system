@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PnF Dashboard</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <h1>PnF Real-Time Dashboard</h1>
+        <p id="meta-line">Waiting for data...</p>
+      </div>
+      <div class="status-wrap">
+        <span id="conn-status" class="badge warn">Connecting</span>
+      </div>
+    </header>
+
+    <section class="layout">
+      <section class="panel chart-panel">
+        <div class="panel-head panel-head-stack">
+          <div class="panel-head-main">
+            <h2>Chart</h2>
+            <div class="chart-tools">
+              <span id="chart-stats"></span>
+              <label class="chip-toggle"><input id="toggle-signals" type="checkbox" checked> Signals</label>
+              <label class="chip-toggle"><input id="toggle-patterns" type="checkbox" checked> Patterns</label>
+              <label class="chip-toggle"><input id="toggle-levels" type="checkbox" checked> Levels</label>
+              <button id="chart-toggle" type="button" class="toggle-btn">Expand</button>
+            </div>
+          </div>
+          <div class="chart-toolbar-row">
+            <div id="overlay-legend" class="overlay-legend"></div>
+            <div class="viewport-tools">
+              <button id="jump-prev-signal" type="button" class="ghost-btn">Prev Signal</button>
+              <button id="jump-latest-signal" type="button" class="ghost-btn">Next Signal</button>
+              <button id="jump-prev-pattern" type="button" class="ghost-btn">Prev Pattern</button>
+              <button id="jump-latest-pattern" type="button" class="ghost-btn">Next Pattern</button>
+              <label class="recent-wrap">Recent
+                <select id="recent-window">
+                  <option value="0">All</option>
+                  <option value="50">50</option>
+                  <option value="100" selected>100</option>
+                  <option value="200">200</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <div class="series-row">
+            <div class="series-toggles">
+              <label class="chip-toggle series-chip sma-short"><input id="toggle-sma-short" type="checkbox" checked> SMA Short</label>
+              <label class="chip-toggle series-chip sma-medium"><input id="toggle-sma-medium" type="checkbox" checked> SMA Medium</label>
+              <label class="chip-toggle series-chip sma-long"><input id="toggle-sma-long" type="checkbox" checked> SMA Long</label>
+              <label class="chip-toggle series-chip band-upper"><input id="toggle-band-upper" type="checkbox"> Upper Band</label>
+              <label class="chip-toggle series-chip band-middle"><input id="toggle-band-middle" type="checkbox"> Middle Band</label>
+              <label class="chip-toggle series-chip band-lower"><input id="toggle-band-lower" type="checkbox"> Lower Band</label>
+              <label class="chip-toggle series-chip rsi-chip"><input id="toggle-rsi" type="checkbox"> RSI</label>
+            </div>
+            <div id="series-legend" class="series-legend"></div>
+            <div id="series-readout" class="series-readout">Hover a column to inspect enabled indicator values.</div>
+          </div>
+          <div class="timeline-row">
+            <label for="timeline-scrubber">Timeline</label>
+            <input id="timeline-scrubber" type="range" min="0" max="0" value="0" step="1">
+            <span id="timeline-label" class="timeline-label">Column 0</span>
+            <span class="kbd-help">Keys: `[` `]` signals, `{` `}` patterns</span>
+          </div>
+        </div>
+        <div id="rsi-panel" class="rsi-panel hidden">
+          <div class="rsi-head">
+            <span>RSI</span>
+            <span id="rsi-latest">Latest: -</span>
+          </div>
+          <div id="rsi-strip" class="rsi-strip"></div>
+        </div>
+        <div id="chart-grid" class="chart-grid"></div>
+      </section>
+
+    </section>
+  </main>
+
+  <div id="chart-tooltip" class="chart-tooltip hidden"></div>
+
+  <script>
+    window.PNF_DASHBOARD_CONFIG = window.PNF_DASHBOARD_CONFIG || {};
+  </script>
+  <script src="/app.js"></script>
+</body>
+</html>

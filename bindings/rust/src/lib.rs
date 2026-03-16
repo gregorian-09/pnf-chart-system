@@ -1,19 +1,18 @@
-//! lib module for Rust bindings.
+//! Safe Rust bindings for the Point and Figure (PnF) chart library.
 mod ffi;
 mod types;
 mod chart;
 mod indicators;
+mod dashboard;
 
 pub use chart::Chart;
+pub use dashboard::{build_snapshot_json, DashboardServer};
 pub use indicators::Indicators;
 pub use types::*;
 
 use std::ffi::CStr;
 
 /// Returns the library version string.
-///
-/// # Returns
-/// 
 pub fn version() -> String {
     unsafe {
         let ptr = ffi::pnf_version_string();
@@ -29,25 +28,16 @@ pub fn version() -> String {
 }
 
 /// Returns the library major version.
-///
-/// # Returns
-/// 
 pub fn version_major() -> i32 {
     unsafe { ffi::pnf_version_major() }
 }
 
 /// Returns the library minor version.
-///
-/// # Returns
-/// 
 pub fn version_minor() -> i32 {
     unsafe { ffi::pnf_version_minor() }
 }
 
 /// Returns the library patch version.
-///
-/// # Returns
-/// 
 pub fn version_patch() -> i32 {
     unsafe { ffi::pnf_version_patch() }
 }

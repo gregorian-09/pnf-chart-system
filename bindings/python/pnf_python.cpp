@@ -193,6 +193,21 @@ PYBIND11_MODULE(pypnf, m) {
             const auto* col = c.column(i);
             return col ? col->lowest_price() : 0.0;
         })
+        .def("box_price", [](const pnf::Chart& c, size_t col_index, size_t box_index) -> double {
+            const auto* col = c.column(col_index);
+            const auto* box = col ? col->get_box_at(box_index) : nullptr;
+            return box ? box->price() : 0.0;
+        })
+        .def("box_type", [](const pnf::Chart& c, size_t col_index, size_t box_index) -> pnf::BoxType {
+            const auto* col = c.column(col_index);
+            const auto* box = col ? col->get_box_at(box_index) : nullptr;
+            return box ? box->type() : pnf::BoxType::X;
+        })
+        .def("box_marker", [](const pnf::Chart& c, size_t col_index, size_t box_index) -> std::string {
+            const auto* col = c.column(col_index);
+            const auto* box = col ? col->get_box_at(box_index) : nullptr;
+            return box ? box->marker() : std::string{};
+        })
         .def("x_column_count", &pnf::Chart::x_column_count)
         .def("o_column_count", &pnf::Chart::o_column_count)
         .def("all_prices", &pnf::Chart::all_prices)
