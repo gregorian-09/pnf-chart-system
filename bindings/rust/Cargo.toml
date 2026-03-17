@@ -3,10 +3,13 @@
 name = "pnf"
 version = "0.1.0"
 edition = "2021"
-authors = ["Gregorian Rayne <gregorianrayne@gmail.com>"]
+authors = ["Gregorian Rayne <gregorianrayne09@gmail.com>"]
 license = "MIT"
-description = "Point and Figure Chart Library - Rust bindings"
+description = "Point and Figure charting library with indicators and real-time dashboard support"
 repository = "https://github.com/gregorian-09/pnf-chart-system"
+homepage = "https://github.com/gregorian-09/pnf-chart-system"
+documentation = "https://docs.rs/pnf"
+readme = "README.md"
 keywords = ["point-figure", "chart", "technical-analysis", "trading"]
 categories = ["finance", "visualization"]
 links = "pnf"

@@ -22,6 +22,11 @@ def read_project_version() -> str:
     return version_file.read_text(encoding="utf-8").strip()
 
 
+def read_readme() -> str:
+    """Read the package README shown on PyPI."""
+    return (Path(__file__).resolve().parent / "README.md").read_text(encoding="utf-8")
+
+
 class CMakeExtension(Extension):
     """Extension that uses CMake for building."""
     def __init__(self, name, sourcedir=""):
@@ -117,15 +122,23 @@ setup(
     name="pypnf",
     version=read_project_version(),
     author="Gregorian Rayne",
-    author_email="gregorianrayne@gmail.com",
+    author_email="gregorianrayne09@gmail.com",
     description="Point and Figure Chart Library - Python bindings",
-    long_description=open("README.md").read() if os.path.exists("README.md") else "",
+    long_description=read_readme(),
     long_description_content_type="text/markdown",
     url="https://github.com/gregorian-09/pnf-chart-system",
+    project_urls={
+        "Documentation": "https://github.com/gregorian-09/pnf-chart-system/tree/master/docs",
+        "API Reference": "https://github.com/gregorian-09/pnf-chart-system/blob/master/docs/bindings/python.md",
+        "Changelog": "https://github.com/gregorian-09/pnf-chart-system/blob/master/CHANGELOG.md",
+        "Issues": "https://github.com/gregorian-09/pnf-chart-system/issues",
+        "Source": "https://github.com/gregorian-09/pnf-chart-system",
+    },
     ext_modules=ext_modules,
     py_modules=["pypnf_dashboard"],
     cmdclass=cmdclass,
     python_requires=">=3.8",
+    keywords="point-and-figure, charting, technical-analysis, trading, indicators",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",

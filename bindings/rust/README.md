@@ -1,83 +1,86 @@
-# PnF Rust Bindings
+# pnf (Rust)
 
-Safe Rust bindings for the Point and Figure Chart Library.
+`pnf` is the official Rust binding for the PnF (Point and Figure) chart engine.
 
-## Requirements
+It exposes:
+- Chart construction with P&F box/reversal rules.
+- Indicator calculations (SMA, Bollinger, RSI, OBV, signals, patterns, support/resistance, congestion).
+- JSON/ASCII exports.
+- A real-time localhost dashboard server.
 
-- Rust 1.56 or higher
-- The PnF C library must be built first
-
-## Building
-
-First, build the C library:
-
-```bash
-cd ../..
-mkdir -p build && cd build
-cmake ..
-cmake --build . --config Release
-```
-
-Then build the Rust bindings:
-
-```bash
-cd ../bindings/rust
-cargo build --release
-```
-
-## Running Tests
-
-```bash
-cargo test
-```
-
-## Usage
-
-Add to your `Cargo.toml`:
+## Installation
 
 ```toml
 [dependencies]
-pnf = { path = "path/to/bindings/rust" }
+pnf = "0.1.0"
 ```
 
-Example usage:
+## Quick Start
 
 ```rust
-use pnf::{Chart, Indicators, ChartConfig, ConstructionMethod, BoxSizeMethod};
+use pnf::{Chart, Indicators};
 
 fn main() {
     let mut chart = Chart::new();
-
-    let timestamp = 1640000000;
-    chart.add_price(100.0, timestamp);
-    chart.add_price(102.0, timestamp + 1);
-    chart.add_price(104.0, timestamp + 2);
-
-    println!("Columns: {}", chart.column_count());
-    println!("Box size: {}", chart.box_size());
+    chart.add_price(5000.0, 1_700_000_000);
+    chart.add_price(5030.0, 1_700_000_001);
 
     let mut indicators = Indicators::new();
     indicators.calculate(&chart);
 
-    println!("Bullish percent: {:.2}%", indicators.bullish_percent());
-    println!("Signals: {}", indicators.signal_count());
-    println!("Patterns: {}", indicators.pattern_count());
+    println!("{}", chart.to_ascii());
+    println!("{}", indicators.summary());
 }
 ```
 
-## Features
+## Real-Time Dashboard
 
-- Safe Rust API wrapping the C library
-- Full support for:
-  - Chart creation and manipulation
-  - Technical indicators (SMA, Bollinger Bands, RSI, OBV)
-  - Signal detection
-  - Pattern recognition
-  - Support/Resistance levels
-  - Congestion zones
-- Automatic memory management
-- Thread-safe (Send + Sync)
+```rust
+use pnf::DashboardServer;
 
-## License
+let mut server = DashboardServer::new();
+server.start("127.0.0.1", 8763).unwrap();
+server.publish(&chart, &indicators).unwrap();
+println!("{}", server.url());
+```
 
-MIT
+## API Highlights
+
+- Core:
+  - `Chart`
+  - `ChartConfig`
+- Indicators:
+  - `Indicators`
+  - `IndicatorConfig`
+- Data types:
+  - `OHLC`, `Signal`, `Pattern`, `SupportResistanceLevel`
+  - enums (`BoxType`, `ColumnType`, `ConstructionMethod`, `BoxSizeMethod`, `SignalType`, `PatternType`)
+- Dashboard:
+  - `DashboardServer`
+  - `build_snapshot_json`
+- Version:
+  - `version()`, `version_major()`, `version_minor()`, `version_patch()`
+
+## Documentation
+
+- Crate docs: https://docs.rs/pnf
+- Project docs: https://github.com/gregorian-09/pnf-chart-system/tree/master/docs
+- Rust binding reference: https://github.com/gregorian-09/pnf-chart-system/blob/master/docs/bindings/rust.md
+
+## Compatibility
+
+- Rust edition: 2021
+- Runtime: stable Rust toolchain
+- Native backend: bundled C ABI bridge from the same project version
+
+## Troubleshooting
+
+- If docs.rs build fails, verify optional dependencies/features are docs-safe.
+- Keep `pnf` crate version aligned with the same released core version.
+- If linking errors occur in local workspace development, rebuild the core project first.
+
+## Links
+
+- Source: https://github.com/gregorian-09/pnf-chart-system
+- Issues: https://github.com/gregorian-09/pnf-chart-system/issues
+- Changelog: https://github.com/gregorian-09/pnf-chart-system/blob/master/CHANGELOG.md

@@ -1,0 +1,189 @@
+name: Publish Bindings
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_python:
+        description: "Publish Python package to PyPI"
+        required: true
+        type: boolean
+        default: true
+      publish_rust:
+        description: "Publish Rust crate to crates.io"
+        required: true
+        type: boolean
+        default: true
+      publish_java:
+        description: "Publish Java package to Maven Central"
+        required: true
+        type: boolean
+        default: true
+      publish_nuget:
+        description: "Publish C# package to NuGet"
+        required: true
+        type: boolean
+        default: true
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    name: Preflight Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate release metadata
+        run: |
+          python3 tools/check_versions.py
+          python3 tools/generate_api_symbol_index.py
+          python3 tools/check_docs_coverage.py
+
+  publish-python:
+    name: Publish Python (PyPI)
+    needs: preflight
+    if: github.event_name == 'push' || inputs.publish_python
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python build tools
+        run: |
+          python3 -m pip install --upgrade pip build twine
+
+      - name: Build package
+        working-directory: bindings/python
+        run: |
+          python3 -m build
+          python3 -m twine check dist/*
+
+      - name: Upload to PyPI
+        working-directory: bindings/python
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: python3 -m twine upload dist/*
+
+  publish-rust:
+    name: Publish Rust (crates.io)
+    needs: preflight
+    if: github.event_name == 'push' || inputs.publish_rust
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Validate package bundle
+        working-directory: bindings/rust
+        run: cargo package --locked
+
+      - name: Upload to crates.io
+        working-directory: bindings/rust
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: cargo publish --locked
+
+  publish-java:
+    name: Publish Java (Maven Central)
+    needs: preflight
+    if: github.event_name == 'push' || inputs.publish_java
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java and GPG
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+      - name: Create Maven settings.xml
+        env:
+          CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_TOKEN_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_TOKEN_PASSWORD }}
+        run: |
+          cat > /tmp/maven-settings.xml <<'EOF'
+          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+            <servers>
+              <server>
+                <id>central</id>
+                <username>${env.CENTRAL_USERNAME}</username>
+                <password>${env.CENTRAL_PASSWORD}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+      - name: Upload to Maven Central
+        working-directory: bindings/java
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+          MAVEN_GPG_KEY_ID: ${{ secrets.MAVEN_GPG_KEY_ID }}
+        run: |
+          mvn -B \
+            -Dmaven.repo.local=/tmp/m2 \
+            -DskipTests \
+            -Pskip-native,release \
+            -Dgpg.passphrase="${MAVEN_GPG_PASSPHRASE}" \
+            -Dgpg.keyname="${MAVEN_GPG_KEY_ID}" \
+            --settings /tmp/maven-settings.xml \
+            deploy
+
+  publish-nuget:
+    name: Publish C# (NuGet)
+    needs: preflight
+    if: github.event_name == 'push' || inputs.publish_nuget
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore and pack
+        working-directory: bindings/csharp
+        env:
+          DOTNET_CLI_HOME: /tmp/dotnet
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+        run: |
+          dotnet restore
+          dotnet pack -c Release -o ./nupkg /p:SkipTestSupport=true
+
+      - name: Upload to NuGet
+        working-directory: bindings/csharp
+        env:
+          DOTNET_CLI_HOME: /tmp/dotnet
+          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          dotnet nuget push ./nupkg/*.nupkg \
+            --source "https://api.nuget.org/v3/index.json" \
+            --api-key "${NUGET_API_KEY}" \
+            --skip-duplicate

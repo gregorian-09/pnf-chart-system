@@ -5,13 +5,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.pnf</groupId>
-    <artifactId>pnf-chart-system</artifactId>
+    <groupId>io.github.gregorian-09</groupId>
+    <artifactId>pnf-java-binding</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
 
-    <name>PnF Chart Library</name>
-    <description>Point and Figure Chart Library - Java bindings with JNI</description>
+    <name>PnF Java Binding</name>
+    <description>Point and Figure charting library for Java with JNI core, indicators, and real-time dashboard support</description>
     <url>https://github.com/gregorian-09/pnf-chart-system</url>
 
     <licenses>
@@ -26,7 +26,8 @@
         <developer>
             <id>gregorian-09</id>
             <name>Gregorian Rayne</name>
-            <email>gregorianrayne@gmail.com</email>
+            <email>gregorianrayne09@gmail.com</email>
+            <url>https://github.com/gregorian-09</url>
         </developer>
     </developers>
 
@@ -35,6 +36,11 @@
         <developerConnection>scm:git:ssh://github.com:gregorian-09/pnf-chart-system.git</developerConnection>
         <url>https://github.com/gregorian-09/pnf-chart-system</url>
     </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/gregorian-09/pnf-chart-system/issues</url>
+    </issueManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -314,14 +320,14 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.6.0</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
                         </configuration>
                     </plugin>
                 </plugins>
