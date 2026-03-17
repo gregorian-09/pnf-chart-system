@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591;1587</NoWarn>
     <SkipTestSupport Condition="'$(SkipTestSupport)' == ''">false</SkipTestSupport>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <PackageId>PnF.ChartSystem</PackageId>
     <Authors>Gregorian Rayne</Authors>
     <Description>Point and Figure Chart Library - C# bindings</Description>
@@ -42,6 +42,9 @@
     <None Include="..\..\build\bin\pnf.dll" Link="pnf_native.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' == 'Windows_NT' AND Exists('..\..\build\bin\pnf.dll')" />
     <None Include="..\..\build\lib\libpnf.so" Link="pnf_native.so" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' != 'Windows_NT' AND Exists('..\..\build\lib\libpnf.so')" />
     <None Include="..\..\build\lib\libpnf.dylib" Link="pnf_native.dylib" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' != 'Windows_NT' AND Exists('..\..\build\lib\libpnf.dylib')" />
+    <None Include="..\..\build\bin\pnf.dll" Pack="true" PackagePath="runtimes/win-x64/native/pnf_native.dll" Condition="Exists('..\..\build\bin\pnf.dll')" />
+    <None Include="..\..\build\lib\libpnf.so" Pack="true" PackagePath="runtimes/linux-x64/native/pnf_native.so" Condition="Exists('..\..\build\lib\libpnf.so')" />
+    <None Include="..\..\build\lib\libpnf.dylib" Pack="true" PackagePath="runtimes/osx-x64/native/pnf_native.dylib" Condition="Exists('..\..\build\lib\libpnf.dylib')" />
   </ItemGroup>
 
 </Project>

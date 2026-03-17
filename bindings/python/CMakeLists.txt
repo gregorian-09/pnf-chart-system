@@ -5,7 +5,7 @@ set(Python3_FIND_STRATEGY LOCATION)
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
-find_package(pybind11 CONFIG REQUIRED)
+find_package(pybind11 CONFIG QUIET)
 
 if(NOT pybind11_FOUND)
     include(FetchContent)
@@ -28,9 +28,15 @@ target_include_directories(pypnf PRIVATE
         ${CMAKE_SOURCE_DIR}/include
 )
 
+if(DEFINED PNF_PYTHON_OUTPUT_DIR AND NOT "${PNF_PYTHON_OUTPUT_DIR}" STREQUAL "")
+    set(_pnf_python_output_dir "${PNF_PYTHON_OUTPUT_DIR}")
+else()
+    set(_pnf_python_output_dir "${CMAKE_BINARY_DIR}/python")
+endif()
+
 set_target_properties(pypnf PROPERTIES
         OUTPUT_NAME "pypnf"
-        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/python
+        LIBRARY_OUTPUT_DIRECTORY "${_pnf_python_output_dir}"
 )
 
 install(TARGETS pypnf DESTINATION ${CMAKE_INSTALL_LIBDIR}/python)

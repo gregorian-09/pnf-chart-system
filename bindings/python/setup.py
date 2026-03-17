@@ -8,12 +8,14 @@ Build modes:
 """
 
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
+from setuptools.command.sdist import sdist as _sdist
 
 
 def read_project_version() -> str:
@@ -40,6 +42,85 @@ def read_readme() -> str:
     return (Path(__file__).resolve().parent / "README.md").read_text(encoding="utf-8")
 
 
+def find_cmake_source_dir() -> str:
+    """
+    Resolve the CMake project root.
+
+    Supported layouts:
+      - Repository checkout: bindings/python/setup.py with root at ../../..
+      - Source distribution: setup.py at archive root with bundled core sources
+      - Explicit override via PNF_SOURCE_DIR
+    """
+    env_source = os.environ.get("PNF_SOURCE_DIR", "").strip()
+    candidates = []
+    if env_source:
+        candidates.append(Path(env_source).resolve())
+
+    this_dir = Path(__file__).resolve().parent
+    candidates.extend([
+        this_dir,
+        this_dir.parent,
+        this_dir.parent.parent,
+        this_dir.parent.parent.parent,
+    ])
+
+    for candidate in candidates:
+        if (
+            (candidate / "CMakeLists.txt").exists()
+            and (candidate / "sources" / "pnf" / "chart.cpp").exists()
+            and (candidate / "bindings" / "python" / "CMakeLists.txt").exists()
+        ):
+            return str(candidate)
+
+    raise FileNotFoundError(
+        "Unable to locate CMake source root. Set PNF_SOURCE_DIR to the project root."
+    )
+
+
+class PnFSdist(_sdist):
+    """Create an sdist that includes the C++ core sources needed by CMake."""
+
+    CORE_FILES = [
+        "CMakeLists.txt",
+        "VERSION",
+        "LICENSE",
+        "bindings/python/CMakeLists.txt",
+        "bindings/python/pnf_python.cpp",
+    ]
+
+    CORE_DIRS = [
+        "cmake",
+        "headers",
+        "sources",
+        "bindings/c",
+    ]
+
+    def make_release_tree(self, base_dir, files):
+        super().make_release_tree(base_dir, files)
+
+        setup_dir = Path(__file__).resolve().parent
+        repo_root = setup_dir.parents[1]
+        if not (repo_root / "CMakeLists.txt").exists():
+            return
+
+        base_path = Path(base_dir)
+
+        for rel_file in self.CORE_FILES:
+            src = repo_root / rel_file
+            if src.exists():
+                dst = base_path / rel_file
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(src, dst)
+
+        for rel_dir in self.CORE_DIRS:
+            src_dir = repo_root / rel_dir
+            if src_dir.exists():
+                dst_dir = base_path / rel_dir
+                if dst_dir.exists():
+                    shutil.rmtree(dst_dir)
+                shutil.copytree(src_dir, dst_dir)
+
+
 class CMakeExtension(Extension):
     """Extension that uses CMake for building."""
     def __init__(self, name, sourcedir=""):
@@ -64,11 +145,14 @@ class CMakeBuild(build_ext):
         # CMake configuration
         cmake_args = [
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}",
+            f"-DPNF_PYTHON_OUTPUT_DIR={extdir}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             "-DPNF_BUILD_PYTHON=ON",
             "-DPNF_BUILD_TESTS=OFF",
             "-DPNF_BUILD_EXAMPLES=OFF",
             "-DPNF_BUILD_VIEWER=OFF",
+            "-DPNF_BUILD_JAVA=OFF",
+            "-DPNF_BUILD_RUST=OFF",
         ]
 
         # Build type
@@ -122,13 +206,12 @@ USE_CMAKE = True  # Set to False if you want direct pybind11 build with system l
 
 if USE_CMAKE:
     # CMake build bundles everything
-    root_dir = str(Path(__file__).parent.parent.parent)
-    ext_modules = [CMakeExtension("pypnf", sourcedir=root_dir)]
-    cmdclass = {"build_ext": CMakeBuild}
+    ext_modules = [CMakeExtension("pypnf", sourcedir=find_cmake_source_dir())]
+    cmdclass = {"build_ext": CMakeBuild, "sdist": PnFSdist}
 else:
     # Direct pybind11 build requires pre-installed libpnf
     ext_modules = [get_pybind11_extension()]
-    cmdclass = {}
+    cmdclass = {"sdist": PnFSdist}
 
 
 setup(
