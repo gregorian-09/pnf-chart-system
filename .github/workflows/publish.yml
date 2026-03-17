@@ -70,15 +70,15 @@ jobs:
       - name: Build package
         working-directory: bindings/python
         run: |
-          python3 -m build
-          python3 -m twine check dist/*
+          python3 -m build --wheel
+          python3 -m twine check dist/*.whl
 
       - name: Upload to PyPI
         working-directory: bindings/python
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: python3 -m twine upload dist/*
+        run: python3 -m twine upload dist/*.whl
 
   publish-rust:
     name: Publish Rust (crates.io)
@@ -166,6 +166,18 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
+
+      - name: Build native runtime library
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DPNF_BUILD_TESTS=OFF \
+            -DPNF_BUILD_EXAMPLES=OFF \
+            -DPNF_BUILD_VIEWER=OFF \
+            -DPNF_BUILD_PYTHON=OFF \
+            -DPNF_BUILD_JAVA=OFF \
+            -DPNF_BUILD_RUST=OFF
+          cmake --build build --target pnf_shared -j"$(nproc)"
 
       - name: Restore and pack
         working-directory: bindings/csharp

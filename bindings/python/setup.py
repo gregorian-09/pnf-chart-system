@@ -18,8 +18,21 @@ from setuptools.command.build_ext import build_ext
 
 def read_project_version() -> str:
     """Read the canonical project version from the repo root VERSION file."""
-    version_file = Path(__file__).resolve().parents[2] / "VERSION"
-    return version_file.read_text(encoding="utf-8").strip()
+    env_version = os.environ.get("PNF_VERSION", "").strip()
+    if env_version:
+        return env_version
+
+    candidates = [
+        Path(__file__).resolve().parent / "VERSION",
+        Path(__file__).resolve().parents[2] / "VERSION",
+    ]
+    for version_file in candidates:
+        if version_file.exists():
+            return version_file.read_text(encoding="utf-8").strip()
+
+    raise FileNotFoundError(
+        "Could not locate VERSION file. Set PNF_VERSION or provide bindings/python/VERSION."
+    )
 
 
 def read_readme() -> str:

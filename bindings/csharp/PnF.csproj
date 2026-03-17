@@ -39,8 +39,8 @@
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="/" />
-    <None Include="..\..\build\bin\pnf.dll" Link="pnf_native.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' == 'Windows_NT'" />
-    <None Include="..\..\build\lib\libpnf.so" Link="pnf_native.so" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' != 'Windows_NT'" />
+    <None Include="..\..\build\bin\pnf.dll" Link="pnf_native.dll" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' == 'Windows_NT' AND Exists('..\..\build\bin\pnf.dll')" />
+    <None Include="..\..\build\lib\libpnf.so" Link="pnf_native.so" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' != 'Windows_NT' AND Exists('..\..\build\lib\libpnf.so')" />
     <None Include="..\..\build\lib\libpnf.dylib" Link="pnf_native.dylib" CopyToOutputDirectory="PreserveNewest" Condition="'$(OS)' != 'Windows_NT' AND Exists('..\..\build\lib\libpnf.dylib')" />
   </ItemGroup>
 

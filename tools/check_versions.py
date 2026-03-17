@@ -53,6 +53,13 @@ def python_version() -> str:
     return m.group(1)
 
 
+def python_version_file() -> str:
+    path = ROOT / "bindings" / "python" / "VERSION"
+    if not path.exists():
+        return read_root_version()
+    return read_text(path).strip()
+
+
 def java_version() -> str:
     path = ROOT / "bindings" / "java" / "pom.xml"
     tree = ET.parse(path)
@@ -90,6 +97,7 @@ def main() -> int:
         "CMake project": cmake_version(),
         "C++ header macros": header_version(),
         "Python package": python_version(),
+        "Python VERSION file": python_version_file(),
         "Java package": java_version(),
         "Rust crate": rust_version(),
         "C# package": csharp_version(),
