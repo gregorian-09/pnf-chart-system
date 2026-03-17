@@ -132,7 +132,7 @@ else:
 
 
 setup(
-    name="pypnf",
+    name="pnf-chart-system",
     version=read_project_version(),
     author="Gregorian Rayne",
     author_email="gregorianrayne09@gmail.com",

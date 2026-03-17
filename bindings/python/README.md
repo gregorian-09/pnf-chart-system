@@ -1,12 +1,12 @@
-# pypnf
+# pnf-chart-system
 
-[![PyPI version](https://img.shields.io/pypi/v/pypnf.svg)](https://pypi.org/project/pypnf/)
-[![Python versions](https://img.shields.io/pypi/pyversions/pypnf.svg)](https://pypi.org/project/pypnf/)
+[![PyPI version](https://img.shields.io/pypi/v/pnf-chart-system.svg)](https://pypi.org/project/pnf-chart-system/)
+[![Python versions](https://img.shields.io/pypi/pyversions/pnf-chart-system.svg)](https://pypi.org/project/pnf-chart-system/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/gregorian-09/pnf-chart-system/blob/master/LICENSE)
 
 Production-ready Python bindings for the PnF (Point and Figure) engine.
 
-Package name is `pypnf`; import name is `pypnf`.
+Package name is `pnf-chart-system`; import name is `pypnf`.
 
 ## Why This Package
 
@@ -24,7 +24,7 @@ Package name is `pypnf`; import name is `pypnf`.
 ## Installation
 
 ```bash
-pip install pypnf
+pip install pnf-chart-system
 ```
 
 ## Quick Start
