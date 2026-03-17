@@ -63,6 +63,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pybind11-dev
+
       - name: Install Python build tools
         run: |
           python3 -m pip install --upgrade pip build twine
