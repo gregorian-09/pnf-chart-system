@@ -132,7 +132,7 @@ else:
 
 
 setup(
-    name="pypnf-gregorian09",
+    name="pypnf",
     version=read_project_version(),
     author="Gregorian Rayne",
     author_email="gregorianrayne09@gmail.com",

@@ -9,8 +9,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591;1587</NoWarn>
     <SkipTestSupport Condition="'$(SkipTestSupport)' == ''">false</SkipTestSupport>
-    <Version>0.1.0</Version>
-    <PackageId>GregorianRayne.PnF</PackageId>
+    <Version>0.1.1</Version>
+    <PackageId>PnF.ChartSystem</PackageId>
     <Authors>Gregorian Rayne</Authors>
     <Description>Point and Figure Chart Library - C# bindings</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>

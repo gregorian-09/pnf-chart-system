@@ -7,7 +7,7 @@
 
     <groupId>io.github.gregorian-09</groupId>
     <artifactId>pnf-java-binding</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <packaging>jar</packaging>
 
     <name>PnF Java Binding</name>

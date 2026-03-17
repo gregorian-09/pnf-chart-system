@@ -1,4 +1,6 @@
-//! Safe Rust bindings for the Point and Figure (PnF) chart library.
+#![doc = include_str!("../README.md")]
+
+//! Runtime and FFI implementation details.
 mod ffi;
 mod types;
 mod chart;
