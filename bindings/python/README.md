@@ -10,7 +10,7 @@ It provides:
 ## Installation
 
 ```bash
-pip install pypnf
+pip install pypnf-gregorian09
 ```
 
 ## Quick Start
