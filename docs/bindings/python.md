@@ -2,81 +2,129 @@
 
 Source:
 - `bindings/python/pnf_python.cpp`
+- `bindings/python/pypnf_dashboard.py`
 
-The Python API wraps the C++ core via pybind11 and exposes Python-native classes and enums.
+For exhaustive generated symbol coverage, see:
+- [API Symbol Index](../reference/api-symbol-index.md)
 
-## Module Composition
+## Runtime Model
 
-- Enums: `BoxType`, `ColumnType`, `ConstructionMethod`, `BoxSizeMethod`, `SignalType`, `PatternType`
-- Config/data structs: `ChartConfig`, `IndicatorConfig`, `OHLC`, `Signal`, `Pattern`, `SupportResistanceLevel`, `PriceObjective`
-- Core classes: `Chart`, `Indicators`
-- Indicator helper classes: `MovingAverage`, `BollingerBands`, `RSI`, `OnBalanceVolume`, `BullishPercent`, `SignalDetector`, `PatternRecognizer`, `SupportResistance`
+- Native core is exposed via pybind11.
+- Python objects own native lifetimes.
+- `Chart.column(i).get_box_at(j)` style views are valid only while parent objects live.
 
-## Lifecycle and Ownership
+## Module-Level Functions
 
-- Python owns wrapper objects.
-- Native object lifetime tracks Python object lifetime.
-- `Column`/`Box` views are only valid while parent `Chart` remains alive.
+- `version()`
+- `version_major()`
+- `version_minor()`
+- `version_patch()`
 
-## `Chart` API Surface
+## Enums
 
-Mutations:
-- `add_data(high, low, close, timestamp)`
-- `add_price(price, timestamp)`
-- `add_ohlc(ohlc)`
-- `clear()`
+- `BoxType`
+- `ColumnType`
+- `ConstructionMethod`
+- `BoxSizeMethod`
+- `SignalType`
+- `PatternType`
 
-Structure queries:
-- `column_count()`, `x_column_count()`, `o_column_count()`
-- `column_type(i)`, `column_box_count(i)`, `column_high(i)`, `column_low(i)`
-- `all_prices()`
+## Data/Config Classes
 
-Market state/export:
-- `current_box_size()`
-- `has_bullish_bias()`, `has_bearish_bias()`
-- `is_above_bullish_support(price)`, `is_below_bearish_resistance(price)`
-- `to_ascii()`, `to_json()`, `str(chart)`
+- `ChartConfig`
+- `IndicatorConfig`
+- `OHLC`
+- `Signal`
+- `Pattern`
+- `SupportResistanceLevel`
+- `PriceObjective`
+- `CongestionZone`
 
-## `Indicators` API Surface
+## Core Objects
 
-Configuration/execution:
-- `configure(config)`
-- `set_sma_periods(...)`
-- `set_bollinger_params(...)`
-- `set_rsi_params(...)`
-- `set_bullish_percent_thresholds(...)`
-- `set_support_resistance_threshold(...)`
-- `set_congestion_params(...)`
-- `calculate(chart)`
+### `Chart`
 
-Retrieval:
-- SMA/Bollinger/RSI/OBV point values and vectors
-- signal access and counts
-- pattern access and counts
-- support/resistance levels and prices
-- objectives and congestion checks
-- `summary()`, `str(indicators)`
+- constructors: `Chart()`, `Chart(config)`
+- ingest: `add_data(...)`, `add_price(...)`, `add_ohlc(...)`
+- columns: `column_count()`, `column_type(i)`, `column_box_count(i)`, `column_high(i)`, `column_low(i)`
+- boxes: `box_price(col, box)`, `box_type(col, box)`, `box_marker(col, box)`
+- counts/state: `x_column_count()`, `o_column_count()`, `all_prices()`, `current_box_size()`
+- bias/trend checks: `has_bullish_bias()`, `has_bearish_bias()`, `is_above_bullish_support(price)`, `is_below_bearish_resistance(price)`
+- utility: `clear()`, `to_ascii()`, `to_json()`, `__str__`, `__len__`
 
-## Error Semantics
+### `Box`
 
-- Out-of-range lookups generally return defaults rather than raising.
-- Empty charts produce empty vectors and default numeric values.
+- `price()`, `type()`, `marker()`, `__str__`
 
-## Example
+### `Column`
 
-```python
-import pypnf
-from datetime import datetime
+- `box_count()`, `type()`, `highest_price()`, `lowest_price()`, `get_box_at(index)`, `has_box(price)`, `__str__`
 
-cfg = pypnf.ChartConfig()
-cfg.box_size_method = pypnf.BoxSizeMethod.Fixed
-cfg.box_size = 1.0
+## Indicator Components (direct)
 
-chart = pypnf.Chart(cfg)
-chart.add_price(100.0, datetime.now())
-chart.add_price(103.0, datetime.now())
+### `MovingAverage`
+- `value(column)`, `has_value(column)`, `period()`, `set_period(period)`, `values()`, `values_copy()`, `__str__`
 
-ind = pypnf.Indicators()
-ind.calculate(chart)
-print(ind.summary())
-```
+### `BollingerBands`
+- `middle(column)`, `upper(column)`, `lower(column)`
+- `has_value(column)`, `is_above_upper(column, price)`, `is_below_lower(column, price)`
+- `period()`, `std_devs()`, `set_period(period)`, `set_std_devs(std)`
+- `middle_band()`, `upper_band()`, `lower_band()`, `middle_copy()`, `upper_copy()`, `lower_copy()`, `__str__`
+
+### `RSI`
+- `value(column)`, `has_value(column)`
+- `is_overbought(column)`, `is_oversold(column)`
+- `is_overbought_custom(column, threshold)`, `is_oversold_custom(column, threshold)`
+- `period()`, `overbought_threshold()`, `oversold_threshold()`
+- `set_period(period)`, `set_thresholds(overbought, oversold)`
+- `values()`, `values_copy()`, `__str__`
+
+### `OnBalanceVolume`
+- `value(column)`, `has_value(column)`, `values()`, `values_copy()`, `__str__`
+
+### `BullishPercent`
+- `value()`, `is_bullish_alert()`, `is_bearish_alert()`
+- `bullish_threshold()`, `bearish_threshold()`
+- `set_thresholds(bullish, bearish)`, `__str__`
+
+### `SignalDetector`
+- `current_signal()`, `signals()`, `signals_copy()`, `last_signal()`
+- `has_buy_signal()`, `has_sell_signal()`
+- `buy_signals()`, `sell_signals()`, `buy_count()`, `sell_count()`, `__str__`
+
+### `PatternRecognizer`
+- `patterns()`, `patterns_copy()`
+- `bullish_patterns()`, `bearish_patterns()`
+- `latest_pattern()`, `has_pattern(pattern_type)`, `patterns_of_type(pattern_type)`
+- `pattern_count()`, `bullish_count()`, `bearish_count()`, `__str__`
+
+### `SupportResistance`
+- `support_levels()`, `resistance_levels()`, `levels_copy()`
+- `significant_levels(min_touches=3)`
+- `is_near_support(price, tolerance)`, `is_near_resistance(price, tolerance)`
+- `support_prices()`, `resistance_prices()`
+- `threshold()`, `set_threshold(...)`, `__str__`
+
+### `PriceObjectiveCalculator`
+- `objectives()`, `objectives_copy()`, `latest()`
+- `bullish_objectives()`, `bearish_objectives()`
+- `bullish_targets()`, `bearish_targets()`, `__str__`
+
+### `CongestionDetector`
+- `zones()`, `zones_copy()`, `is_in_congestion(column)`, `largest_zone()`
+- `min_columns()`, `threshold()`, `set_min_columns(...)`, `set_threshold(...)`, `__str__`
+
+## `Indicators` Aggregator
+
+- constructors: `Indicators()`, `Indicators(config)`
+- config/update: `configure(config)`, `config()`, `calculate(chart)`, `calculate_with_volume(chart, ohlc_data)`
+- component accessors: `sma_short()`, `sma_medium()`, `sma_long()`, `bollinger()`, `rsi()`, `obv()`, `bullish_percent()`, `signals()`, `patterns()`, `support_resistance()`, `objectives()`, `congestion()`
+- export/summary: `export_data()`, `summary()`, `__str__`
+
+## Dashboard Helper (`pypnf_dashboard`)
+
+- `DashboardServer(chart, indicators)`
+- `start(host, port)` / `stop()`
+- `publish()` / `snapshot_json()`
+- `start_auto_publish(interval_ms)` / `stop_auto_publish()`
+- `url()`

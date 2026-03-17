@@ -14,7 +14,7 @@ ctest --test-dir build-linux --output-on-failure
 
 ```bash
 PYTHONPATH=build-linux/python python3 -m pytest bindings/python/test_pypnf.py -q
-(cd bindings/java && mvn test -Dmaven.repo.local=/tmp/m2 -Dnative.library.path=/home/gregorian-rayne/ChartSystem/build-linux/lib)
+(cd bindings/java && mvn test -Dmaven.repo.local=/tmp/m2 -Dnative.library.path=$(cd ../.. && pwd)/build-linux/lib)
 (cd bindings/rust && cargo test --release)
 (cd bindings/csharp && DOTNET_CLI_HOME=/tmp/dotnet DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 dotnet test -c Release)
 ```

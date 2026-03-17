@@ -4,79 +4,85 @@ Source:
 - `bindings/java/pnf_java.cpp`
 - `bindings/java/com/pnf/*.java`
 
-The Java binding uses JNI and loads native library `pnfjni`.
+For exhaustive generated symbol coverage, see:
+- [API Symbol Index](../reference/api-symbol-index.md)
 
 ## Runtime Contract
 
-- Java classes own native pointers (`long nativePtr`).
-- `Chart` and `Indicators` implement `AutoCloseable`.
-- Always call `close()` or use try-with-resources.
+- JNI bridge loaded by `System.loadLibrary("pnfjni")`
+- `Chart`, `Indicators`, and `DashboardServer` are `AutoCloseable`
+- Native library path required at runtime (`-Djava.library.path=...`)
 
-## Loading Native Library
+## Enum Types
 
-```java
-static { System.loadLibrary("pnfjni"); }
-```
+- `BoxSizeMethod`
+- `BoxType`
+- `ColumnType`
+- `ConstructionMethod`
+- `LevelType`
+- `PatternType`
+- `SignalType`
 
-Set runtime path for tests/run:
-- `-Dnative.library.path=/absolute/path/to/build-linux/lib`
+## Configuration and Data Records
 
-## `Chart` API Groups
+- `ChartConfig` (+ builder)
+- `IndicatorConfig` (+ builder + immutable `withX` updates)
+- `Signal`
+- `Pattern`
+- `SupportResistanceLevel`
+- `PriceObjective`
+- `CongestionZone`
 
-Creation:
-- `Chart()`
-- `Chart(ChartConfig config)`
+## `Chart`
 
-Mutation:
-- `addData(high, low, close, timestamp)`
-- `addPrice(price, timestamp)`
-- `clear()`
+- constructors: `Chart()`, `Chart(ChartConfig)`
+- ingest: `addData(high, low, close, timestamp)`, `addPrice(price, timestamp)`
+- column queries: `columnCount()`, `xColumnCount()`, `oColumnCount()`
+- value queries: `boxSize()`, `columnType(i)`, `columnBoxCount(i)`, `columnHighest(i)`, `columnLowest(i)`
+- box queries: `boxPrice(col, box)`, `boxType(col, box)`, `boxMarker(col, box)`
+- trend/bias: `hasBullishBias()`, `hasBearishBias()`
+- utility: `clear()`, `toString()`, `toAscii()`, `close()`
 
-Queries:
-- `columnCount()`, `xColumnCount()`, `oColumnCount()`
-- `boxSize()`
-- `columnType(i)`, `columnBoxCount(i)`, `columnHighest(i)`, `columnLowest(i)`
-- `hasBullishBias()`, `hasBearishBias()`
+## `Indicators`
 
-Lifecycle:
-- `close()`
-- `toString()`
-
-## `Indicators` API Groups
-
-Configuration:
+### Configuration and Execution
 - `configure(config)`
-- `setSmaPeriods(...)`
-- `setBollingerParams(...)`
-- `setRsiParams(...)`
-
-Execution:
+- `getConfig()`
 - `calculate(chart)`
+- `setSmaPeriods(short, medium, long)`
+- `setBollingerParams(period, stdDevs)`
+- `setRsiParams(period, overbought, oversold)`
 
-Retrieval:
-- SMA, Bollinger, RSI, OBV values and arrays
-- signal APIs (`currentSignal`, `signals`, counts)
-- pattern APIs (`patterns`, bullish/bearish subsets)
-- support/resistance APIs
-- price objective APIs
-- congestion APIs
-- `summary()`, `toString()`
+### Counts and Alerts
+- `supportLevelCount()`, `resistanceLevelCount()`, `congestionZoneCount()`
+- `bullishPercent()`, `isBullishAlert()`, `isBearishAlert()`
+- `currentSignal()`, `hasBuySignal()`, `hasSellSignal()`
+- `signalCount()`, `buySignalCount()`, `sellSignalCount()`
+- `patternCount()`, `bullishPatternCount()`, `bearishPatternCount()`
 
-Lifecycle:
+### SMA/Bollinger/RSI/OBV
+- SMA: `smaShort`, `smaMedium`, `smaLong`, `sma5`, `sma10`, `sma20`, and corresponding `*Values()`
+- Bollinger: `bollingerMiddle`, `bollingerUpper`, `bollingerLower`, `hasBollingerValue`, `isAboveUpperBand`, `isBelowLowerBand`, and `*Values()`
+- RSI: `rsi`, `hasRsiValue`, `isOverbought`, `isOversold`, `rsiValues()`
+- OBV: `obv`, `obvValues()`
+
+### Signals, Patterns, Levels, Objectives, Congestion
+- signals: `signals()`, `buySignals()`, `sellSignals()`
+- patterns: `hasPattern(type)`, `patterns()`, `bullishPatterns()`, `bearishPatterns()`
+- levels: `levels()`, `supportLevels()`, `resistanceLevels()`, `significantLevels(minTouches)`, `isNearSupport`, `isNearResistance`, `supportPrices()`, `resistancePrices()`
+- objectives: `priceObjectives()`, `bullishObjectives()`, `bearishObjectives()`, `bullishTargets()`, `bearishTargets()`
+- congestion: `congestionZones()`, `isInCongestion(column)`, `largestCongestionZone()`
+
+### Summary and Lifecycle
+- `summary()`
+- `toString()`
 - `close()`
 
-## Error Model
+## `DashboardServer`
 
-- Invalid indexes typically return default values.
-- Access after `close()` should be treated as invalid usage.
-
-## Example
-
-```java
-try (Chart chart = new Chart(); Indicators ind = new Indicators()) {
-    chart.addPrice(100.0, System.currentTimeMillis());
-    chart.addPrice(103.0, System.currentTimeMillis());
-    ind.calculate(chart);
-    System.out.println(ind.summary());
-}
-```
+- chart/indicator assignment: `setChart(...)`, `setIndicators(...)`
+- start/stop: `start()`, `start(host, port)`, `stop()`
+- publish: `publish()`, `snapshotJson()`, `buildSnapshotJson(...)`
+- streaming: `startAutoPublish()`, `startAutoPublish(intervalMs)`, `stopAutoPublish()`
+- endpoint: `url()`
+- lifecycle: `close()`

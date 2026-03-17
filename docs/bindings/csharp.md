@@ -5,83 +5,87 @@ Source:
 - `bindings/csharp/Indicators.cs`
 - `bindings/csharp/Types.cs`
 - `bindings/csharp/NativeMethods.cs`
+- `bindings/csharp/Version.cs`
+- `bindings/csharp/DashboardServer.cs`
 
-C# binding uses P/Invoke over the C ABI.
+For exhaustive generated symbol coverage, see:
+- [API Symbol Index](../reference/api-symbol-index.md)
 
-## Runtime and Framework
+## Runtime and Ownership
 
-- Target framework: `.NET 8` (LTS)
-- Native library resolution must find `libpnf.so`/`pnf.dll`
+- Target: `.NET 8`
+- Native interop via P/Invoke (`NativeMethods`)
+- `Chart`, `Indicators`, and `DashboardServer` implement disposal patterns
 
-## Lifecycle and Disposal
+## Public Types (`Types.cs`)
 
-- `Chart` and `Indicators` are native-backed and implement disposal semantics.
-- Use `using` blocks or call `Dispose()` explicitly.
-- Do not access methods after disposal.
+### Enums
+- `BoxType`
+- `ColumnType`
+- `ConstructionMethod`
+- `BoxSizeMethod`
+- `SignalType`
+- `PatternType`
 
-## `Chart` API Groups
+### Structs
+- `ChartConfig`
+- `IndicatorConfig`
+- `OHLC`
+- `Signal`
+- `Pattern`
+- `SupportResistanceLevel`
+- `PnfDoubleArray`
+- `PnfSignalArray`
+- `PnfPatternArray`
+- `PnfLevelArray`
 
-Creation:
-- `Chart()`
-- `Chart(ChartConfig config)`
+## `Chart`
 
-Mutation:
-- `AddData(high, low, close, timestamp)`
-- `AddPrice(price, timestamp)`
-- `AddOHLC(OHLC)`
-- `Clear()`
+- constructors: `Chart()`, `Chart(ChartConfig)`
+- ingest: `AddData(...)`, `AddPrice(...)`, `AddOHLC(...)`
+- properties: `ColumnCount`, `XColumnCount`, `OColumnCount`, `BoxSize`, `HasBullishBias`, `HasBearishBias`
+- column/box queries: `GetColumnType`, `GetColumnBoxCount`, `GetColumnHighest`, `GetColumnLowest`, `GetBoxPrice`, `GetBoxType`, `GetBoxMarker`
+- trend checks: `IsAboveBullishSupport(price)`, `IsBelowBearishResistance(price)`
+- utility/export: `Clear()`, `ToString()`, `ToAscii()`, `ToJson()`, `Dispose()`
 
-Counts/properties:
-- `ColumnCount`, `XColumnCount`, `OColumnCount`, `BoxSize`
+## `Indicators`
 
-Column/box reads:
-- `GetColumnType(index)`
-- `GetColumnBoxCount(index)`
-- `GetColumnHighest(index)`
-- `GetColumnLowest(index)`
-- `GetBoxPrice(columnIndex, boxIndex)`
-- `GetBoxType(columnIndex, boxIndex)`
-- `GetBoxMarker(columnIndex, boxIndex)`
-
-Context/export:
-- `HasBullishBias`, `HasBearishBias`
-- `IsAboveBullishSupport(price)`, `IsBelowBearishResistance(price)`
-- `ToAscii()`, `ToJson()`, `ToString()`
-
-## `Indicators` API Groups
-
-Configuration:
-- `Configure(IndicatorConfig)`
+### Configuration and Execution
+- `Configure(config)`
 - `SetSmaPeriods(...)`
 - `SetBollingerParams(...)`
 - `SetRsiParams(...)`
-- threshold setters for bullish percent, S/R, congestion
+- `SetBullishPercentThresholds(...)`
+- `SetSupportResistanceThreshold(...)`
+- `SetCongestionParams(...)`
+- `Calculate(chart)`
 
-Execution:
-- `Calculate(Chart)`
+### Values and Collections
+- SMA: `SmaShort`, `SmaMedium`, `SmaLong`, plus `SmaShortValues`, `SmaMediumValues`, `SmaLongValues`
+- Bollinger: `BollingerMiddle`, `BollingerUpper`, `BollingerLower`, plus `Bollinger*Values`
+- RSI/OBV: `Rsi`, `RsiIsOverbought`, `RsiIsOversold`, `RsiValues`, `Obv`, `ObvValues`
+- signals: `CurrentSignal`, `SignalCount`, `BuySignalCount`, `SellSignalCount`, `GetSignals`
+- patterns: `PatternCount`, `BullishPatternCount`, `BearishPatternCount`, `GetPatterns`, `GetBullishPatterns`, `GetBearishPatterns`
+- levels: `SupportLevelCount`, `ResistanceLevelCount`, `IsNearSupport`, `IsNearResistance`, `GetSupportLevels`, `GetResistanceLevels`, `GetSupportPrices`, `GetResistancePrices`
+- congestion: `CongestionZoneCount`, `IsInCongestion`
+- summary: `BullishPercent`, `IsBullishAlert`, `IsBearishAlert`, `Summary()`, `ToString()`, `Dispose()`
 
-Retrieval:
-- SMA/Bollinger/RSI/OBV values and arrays
-- `BullishPercent`, alert booleans
-- `CurrentSignal`, signal counts, `GetSignals()`
-- pattern counts and getters (`GetPatterns`, bullish/bearish variants)
-- support/resistance counts, prices, and level lists
-- congestion APIs
-- `Summary()`, `ToString()`
+## `Version`
 
-## Error Behavior
+- `Version.String`
+- `Version.Major`
+- `Version.Minor`
+- `Version.Patch`
+- `Version.Full`
 
-- Invalid index reads generally return default values.
-- Native interop failures should be treated as fatal integration errors.
+## `DashboardServer`
 
-## Example
+- assignment: `SetChart(...)`, `SetIndicators(...)`
+- server lifecycle: `Start(host, port)`, `Stop()`, `Dispose()`
+- publish flow: `Publish()`, `SnapshotJson()`
+- auto-publish: `StartAutoPublish(intervalMs)`, `StopAutoPublish()`
+- status/properties: `IsRunning`, `Host`, `Port`, `Url()`, `Chart`, `Indicators`
 
-```csharp
-using var chart = new Chart();
-chart.AddPrice(100.0, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-chart.AddPrice(103.0, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+## Low-Level Interop (`NativeMethods`)
 
-using var indicators = new Indicators();
-indicators.Calculate(chart);
-Console.WriteLine(indicators.Summary());
-```
+`NativeMethods` exposes the full C ABI surface one-to-one for advanced callers. Most application code should use `Chart` and `Indicators` wrappers instead.

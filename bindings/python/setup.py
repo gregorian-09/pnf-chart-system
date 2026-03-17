@@ -9,13 +9,17 @@ Build modes:
 
 import os
 import subprocess
-\"\"\"Build script for the Python bindings.\"\"\"
-
 import sys
 from pathlib import Path
 
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
+
+
+def read_project_version() -> str:
+    """Read the canonical project version from the repo root VERSION file."""
+    version_file = Path(__file__).resolve().parents[2] / "VERSION"
+    return version_file.read_text(encoding="utf-8").strip()
 
 
 class CMakeExtension(Extension):
@@ -111,7 +115,7 @@ else:
 
 setup(
     name="pypnf",
-    version="2.0.0",
+    version=read_project_version(),
     author="Gregorian Rayne",
     author_email="gregorianrayne@gmail.com",
     description="Point and Figure Chart Library - Python bindings",

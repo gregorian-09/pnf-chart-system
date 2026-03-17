@@ -27,7 +27,7 @@ PYTHONPATH=build-linux/python python3 -m pytest bindings/python/test_pypnf.py -q
 
 ```bash
 cd bindings/java
-mvn test -Dmaven.repo.local=/tmp/m2 -Dnative.library.path=/home/gregorian-rayne/ChartSystem/build-linux/lib
+mvn test -Dmaven.repo.local=/tmp/m2 -Dnative.library.path=$(cd ../.. && pwd)/build-linux/lib
 ```
 
 ### Rust

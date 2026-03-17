@@ -59,6 +59,7 @@ flowchart TD
 ## API Reference
 
 - [C++ API](reference/cpp-api.md)
+- [API Symbol Index (Generated)](reference/api-symbol-index.md)
 - [C ABI](bindings/c-abi.md)
 - [Python API](bindings/python.md)
 - [Java API](bindings/java.md)
@@ -74,6 +75,7 @@ flowchart TD
 
 - [Compatibility Matrix](operations/compatibility-matrix.md)
 - [Release and Versioning](operations/release-and-versioning.md)
+- [Project Changelog](../CHANGELOG.md)
 - [CI/CD Design](operations/ci-cd.md)
 - [Security and Memory Ownership](operations/security-memory.md)
 

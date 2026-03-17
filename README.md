@@ -33,10 +33,13 @@ Docs:
 - [Build and Test](docs/getting-started/build-and-test.md)
 - [Architecture](docs/architecture.md)
 - [C++ API Reference](docs/reference/cpp-api.md)
+- [API Symbol Index (Generated)](docs/reference/api-symbol-index.md)
 - [Numeric Examples](docs/examples.md)
 - [Guides: Common Workflows](docs/guides/common-workflows.md)
 - [Guides: Troubleshooting](docs/guides/troubleshooting.md)
 - [Operations: Compatibility Matrix](docs/operations/compatibility-matrix.md)
+- [Operations: Release and Versioning](docs/operations/release-and-versioning.md)
+- [Project Changelog](CHANGELOG.md)
 - [Bindings (C ABI)](docs/bindings/c-abi.md)
 - [Bindings (Python)](docs/bindings/python.md)
 - [Bindings (Java)](docs/bindings/java.md)
@@ -100,6 +103,17 @@ flowchart TD
 - Indicators: SMA, Bollinger, RSI, OBV, signals, patterns, S/R, objectives, congestion
 - Exports: ASCII, JSON, CSV
 - Bindings: Python, Java, Rust, C#
+
+## Documentation and Version Governance
+
+- Canonical release version: root `VERSION`
+- Release notes and change history: `CHANGELOG.md`
+- Cross-binding version consistency check:
+  - `python3 tools/check_versions.py`
+- Generated exhaustive API symbol index:
+  - `python3 tools/generate_api_symbol_index.py`
+- API docs coverage validation:
+  - `python3 tools/check_docs_coverage.py`
 
 ## Build (C++ Core)
 

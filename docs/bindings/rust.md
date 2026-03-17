@@ -2,20 +2,21 @@
 
 Source:
 - `bindings/rust/src/lib.rs`
+- `bindings/rust/src/types.rs`
 - `bindings/rust/src/chart.rs`
 - `bindings/rust/src/indicators.rs`
-- `bindings/rust/src/types.rs`
+- `bindings/rust/src/dashboard.rs`
 
-The Rust crate wraps the C ABI and provides safe ergonomic wrappers over FFI calls.
+For exhaustive generated symbol coverage, see:
+- [API Symbol Index](../reference/api-symbol-index.md)
 
-## Crate Layers
+## Crate Exports
 
-```mermaid
-flowchart LR
-  R[Rust safe API] --> F[ffi.rs extern C]
-  F --> C[C ABI]
-  C --> CPP[C++ Core]
-```
+- `Chart`
+- `Indicators`
+- `DashboardServer`
+- `build_snapshot_json`
+- all public types from `types.rs`
 
 ## Top-Level Version API
 
@@ -24,64 +25,74 @@ flowchart LR
 - `version_minor()`
 - `version_patch()`
 
-## `Chart` API
+## Public Types (`types.rs`)
 
-Creation:
-- `Chart::new()`
-- `Chart::with_config(config)`
+### Enums
+- `BoxType`
+- `ColumnType`
+- `ConstructionMethod`
+- `BoxSizeMethod`
+- `SignalType`
+- `PatternType`
 
-Mutation:
-- `add_data(...)`
-- `add_price(...)`
-- `add_ohlc(&OHLC)`
-- `clear()`
+### Structs
+- `ChartConfig`
+- `IndicatorConfig`
+- `OHLC`
+- `Signal`
+- `Pattern`
+- `SupportResistanceLevel`
+- `ColumnData`
 
-Queries:
-- `column_count()`, `x_column_count()`, `o_column_count()`
-- `box_size()`
-- `column_type(i)`, `column_box_count(i)`, `column_highest(i)`, `column_lowest(i)`
-- `box_price(col, box)`, `box_type(col, box)`, `box_marker(col, box)`
-- `has_bullish_bias()`, `has_bearish_bias()`
-- `is_above_bullish_support(price)`, `is_below_bearish_resistance(price)`
-- `to_string()`, `to_ascii()`, `to_json()`
+## `Chart`
 
-## `Indicators` API
+- constructors: `new()`, `with_config(config)`
+- ingest: `add_data(...)`, `add_price(...)`, `add_ohlc(&OHLC)`
+- counts/state: `column_count()`, `x_column_count()`, `o_column_count()`, `box_size()`
+- column/box queries: `column_type(i)`, `column_box_count(i)`, `column_highest(i)`, `column_lowest(i)`, `box_price(col, box)`, `box_type(col, box)`, `box_marker(col, box)`
+- trend/bias checks: `has_bullish_bias()`, `has_bearish_bias()`, `is_above_bullish_support(price)`, `is_below_bearish_resistance(price)`
+- utility/export: `clear()`, `to_string()`, `to_ascii()`, `to_json()`
 
-Configuration:
-- `new()`, `with_config(config)`, `configure(config)`
-- `set_sma_periods`, `set_bollinger_params`, `set_rsi_params`
-- threshold/config setters for alerts and congestion
+## `Indicators`
 
-Execution:
+### Lifecycle and Configuration
+- `new()`
+- `with_config(config)`
+- `configure(config)`
+- `set_sma_periods(short, medium, long)`
+- `set_bollinger_params(period, std_devs)`
+- `set_rsi_params(period, overbought, oversold)`
+- `set_bullish_percent_thresholds(bullish, bearish)`
+- `set_support_resistance_threshold(threshold)`
+- `set_congestion_params(min_columns, price_range)`
 - `calculate(&Chart)`
 
-Retrieval:
-- SMA/Bollinger/RSI/OBV scalar + vectors
-- signal and pattern counts and lists
-- support/resistance counts and levels
-- congestion checks
-- `summary()`, `to_string()`
+### Indicator Values
+- SMA: `sma_short`, `sma_medium`, `sma_long`, and `*_values`
+- Bollinger: `bollinger_middle`, `bollinger_upper`, `bollinger_lower`, and `*_values`
+- RSI: `rsi`, `rsi_is_overbought`, `rsi_is_oversold`, `rsi_values`
+- OBV: `obv`, `obv_values`
 
-## Ownership and Safety
+### Signals, Patterns, Levels
+- alerts and current state: `bullish_percent`, `is_bullish_alert`, `is_bearish_alert`, `current_signal`
+- signals: `signal_count`, `signals`, `buy_signal_count`, `sell_signal_count`
+- patterns: `pattern_count`, `bullish_pattern_count`, `bearish_pattern_count`, `patterns`, `bullish_patterns`, `bearish_patterns`
+- support/resistance: `support_level_count`, `resistance_level_count`, `is_near_support`, `is_near_resistance`, `support_levels`, `resistance_levels`, `support_prices`, `resistance_prices`
+- congestion: `is_in_congestion`, `congestion_zone_count`
 
-- Wrappers own native handles.
-- `Drop` releases underlying C handles.
-- Arrays/strings from C ABI are copied into Rust-owned types before free.
+### Summary
+- `summary()`
+- `to_string()`
 
-## Example
+## Dashboard (`dashboard.rs`)
 
-```rust
-use pnf::{Chart, Indicators, ChartConfig, BoxSizeMethod};
+### `DashboardServer`
+- `new()`
+- `start(host, port)`
+- `url()`
+- `snapshot_json()`
+- `publish(chart, indicators)`
+- `stop()`
 
-let mut cfg = ChartConfig::new();
-cfg.box_size_method = BoxSizeMethod::Fixed;
-cfg.box_size = 1.0;
-
-let mut chart = Chart::with_config(cfg);
-chart.add_price(100.0, 1);
-chart.add_price(103.0, 2);
-
-let mut ind = Indicators::new();
-ind.calculate(&chart);
-println!("{:?}", ind.summary());
-```
+### Snapshot Builder
+- `build_snapshot_json(chart, indicators, sequence)`
