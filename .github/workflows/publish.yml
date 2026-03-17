@@ -92,8 +92,8 @@ jobs:
       - name: Build package
         working-directory: bindings/python
         run: |
-          python3 -m build --wheel
-          python3 -m twine check dist/*.whl
+          python3 -m build --sdist
+          python3 -m twine check dist/*.tar.gz
 
       - name: Upload to TestPyPI
         if: github.event_name == 'workflow_dispatch' && inputs.python_repository == 'testpypi'
@@ -101,7 +101,7 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: python3 -m twine upload --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*.whl
+        run: python3 -m twine upload --skip-existing --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz
 
       - name: Upload to PyPI
         if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.python_repository == 'pypi')
@@ -109,7 +109,7 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: python3 -m twine upload --skip-existing dist/*.whl
+        run: python3 -m twine upload --skip-existing dist/*.tar.gz
 
   publish-rust:
     name: Publish Rust (crates.io)
